@@ -9,7 +9,6 @@ namespace InventoryAPI.Controllers
     [ApiController]
     public class InventoryController : Controller
     {
-
         private readonly IConfiguration _config;
 
         public InventoryController(IConfiguration config)

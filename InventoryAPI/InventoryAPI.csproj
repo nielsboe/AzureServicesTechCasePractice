@@ -5,20 +5,36 @@
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
   </PropertyGroup>
+  
+  <ItemGroup>
+    <Compile Remove="Automapper\**" />
+    <Compile Remove="DTO\**" />
+    <Compile Remove="Interfaces\**" />
+    <Compile Remove="Migrations\**" />
+    <Compile Remove="Repository\**" />
+    <Content Remove="Automapper\**" />
+    <Content Remove="DTO\**" />
+    <Content Remove="Interfaces\**" />
+    <Content Remove="Migrations\**" />
+    <Content Remove="Repository\**" />
+    <EmbeddedResource Remove="Automapper\**" />
+    <EmbeddedResource Remove="DTO\**" />
+    <EmbeddedResource Remove="Interfaces\**" />
+    <EmbeddedResource Remove="Migrations\**" />
+    <EmbeddedResource Remove="Repository\**" />
+    <None Remove="Automapper\**" />
+    <None Remove="DTO\**" />
+    <None Remove="Interfaces\**" />
+    <None Remove="Migrations\**" />
+    <None Remove="Repository\**" />
+  </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="Azure.Messaging.ServiceBus" Version="7.17.5" />
     <PackageReference Include="MassTransit" Version="8.2.0" />
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="8.0.4" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="8.0.4" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.5.0" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Automapper\" />
-    <Folder Include="DTO\" />
-    <Folder Include="Interfaces\" />
-    <Folder Include="Migrations\" />
-    <Folder Include="Repository\" />
   </ItemGroup>
 
 </Project>

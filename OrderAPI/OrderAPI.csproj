@@ -7,6 +7,33 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Automapper\**" />
+    <Compile Remove="Data\**" />
+    <Compile Remove="DTO\**" />
+    <Compile Remove="Interfaces\**" />
+    <Compile Remove="Migrations\**" />
+    <Compile Remove="Repository\**" />
+    <Content Remove="Automapper\**" />
+    <Content Remove="Data\**" />
+    <Content Remove="DTO\**" />
+    <Content Remove="Interfaces\**" />
+    <Content Remove="Migrations\**" />
+    <Content Remove="Repository\**" />
+    <EmbeddedResource Remove="Automapper\**" />
+    <EmbeddedResource Remove="Data\**" />
+    <EmbeddedResource Remove="DTO\**" />
+    <EmbeddedResource Remove="Interfaces\**" />
+    <EmbeddedResource Remove="Migrations\**" />
+    <EmbeddedResource Remove="Repository\**" />
+    <None Remove="Automapper\**" />
+    <None Remove="Data\**" />
+    <None Remove="DTO\**" />
+    <None Remove="Interfaces\**" />
+    <None Remove="Migrations\**" />
+    <None Remove="Repository\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Azure.Messaging.ServiceBus" Version="7.17.5" />
     <PackageReference Include="MassTransit" Version="8.2.0" />
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="8.0.4" />
@@ -14,12 +41,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Data\" />
-    <Folder Include="DTO\" />
-    <Folder Include="Interfaces\" />
-    <Folder Include="Automapper\" />
-    <Folder Include="Migrations\" />
-    <Folder Include="Repository\" />
+    <ProjectReference Include="..\ShippingAPI\ShippingAPI.csproj" />
   </ItemGroup>
 
 </Project>

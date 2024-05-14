@@ -9,7 +9,6 @@ namespace OrderAPI.Controllers
     [ApiController]
     public class OrderController : Controller
     {
-
         private readonly IConfiguration _config;
 
         public OrderController(IConfiguration config)
