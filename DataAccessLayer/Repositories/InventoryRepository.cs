@@ -1,7 +1,6 @@
 ﻿using DataAccessLayer.Interfaces;
 using DataAccessLayer.Data;
-using InventoryAPI.Models;
-using Microsoft.AspNetCore.Mvc;
+using Domain;
 
 namespace DataAccessLayer.Repositories
 {
@@ -30,20 +29,20 @@ namespace DataAccessLayer.Repositories
 
         public bool CreateProduct(Product product)
         {
-            _context.Add(product);
+            _context.Products.Add(product);
 
             return Save();
         }
 
         public bool UpdateProduct(Product product)
         {
-            _context.Update(product);
+            _context.Products.Update(product);
             return Save();
         }
 
         public bool DeleteProduct(Product product)
         {
-            _context.Remove(product);
+            _context.Products.Remove(product);
             return Save();
         }
 

@@ -1,7 +1,6 @@
 ﻿using DataAccessLayer.Data;
 using DataAccessLayer.Interfaces;
-using Microsoft.EntityFrameworkCore;
-using OrderAPI.Models;
+using Domain;
 
 namespace DataAccessLayer.Repositories
 {
@@ -18,7 +17,7 @@ namespace DataAccessLayer.Repositories
         }
         public bool CreateOrder(Order order)
         {
-            _context.Add(order);
+            _context.Orders.Add(order);
 
             return Save();
         }
@@ -35,13 +34,13 @@ namespace DataAccessLayer.Repositories
 
         public bool UpdateOrder(Order order)
         {
-            _context.Update(order);
+            _context.Orders.Update(order);
             return Save();
         }
 
         public bool DeleteOrder(Order order)
         {
-            _context.Remove(order);
+            _context.Orders.Remove(order);
 
             return Save();
         }

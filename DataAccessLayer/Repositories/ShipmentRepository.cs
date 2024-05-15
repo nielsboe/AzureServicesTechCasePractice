@@ -1,12 +1,13 @@
 ﻿using DataAccessLayer.Data;
-using InventoryAPI.Models;
-using ShippingAPI.Models;
+using DataAccessLayer.Interfaces;
+using Domain;
 
 namespace DataAccessLayer.Repositories
 {
-    public class ShipmentRepository
+    public class ShipmentRepository : IShipmentRepository
     {
         private readonly DataContext _context;
+
         public ShipmentRepository(DataContext context)
         {
             _context = context;
@@ -29,20 +30,20 @@ namespace DataAccessLayer.Repositories
 
         public bool CreateShipment(Shipment shipment)
         {
-            _context.Add(shipment);
+            _context.Shipments.Add(shipment);
 
             return Save();
         }
 
         public bool UpdateShipment(Shipment shipment)
         {
-            _context.Update(shipment);
+            _context.Shipments.Update(shipment);
             return Save();
         }
 
         public bool DeleteShipment(Shipment shipment)
         {
-            _context.Remove(shipment);
+            _context.Shipments.Remove(shipment);
             return Save();
         }
 

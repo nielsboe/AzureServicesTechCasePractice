@@ -1,7 +1,5 @@
 ﻿using DataAccessLayer.Data;
-using InventoryAPI.Models;
-using OrderAPI.Models;
-using ShippingAPI.Models;
+using Domain;
 
 namespace DataAccessLayer
 {

@@ -1,16 +1,14 @@
-﻿using OrderAPI.Models;
-using ShippingAPI.Models;
+﻿using Domain;
 
-namespace DataAccessLayer.Interfaces
+namespace DataAccessLayer.Interfaces;
+
+public interface IShipmentRepository
 {
-    public interface IShipmentRepository
-    {
-        ICollection<Shipment> GetShipments();
-        Shipment GetShipment(int id);
-        bool ShipmentExists(int id);
-        bool CreateShipment(Shipment shipment);
-        bool UpdateShipment(Shipment shipment);
-        bool DeleteShipment(Shipment shipment);
-        bool Save();
-    }
+    ICollection<Shipment> GetShipments();
+    Shipment GetShipment(int id);
+    bool ShipmentExists(int id);
+    bool CreateShipment(Shipment shipment);
+    bool UpdateShipment(Shipment shipment);
+    bool DeleteShipment(Shipment shipment);
+    bool Save();
 }

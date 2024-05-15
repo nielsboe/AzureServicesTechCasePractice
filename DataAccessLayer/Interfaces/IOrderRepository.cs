@@ -1,16 +1,14 @@
-﻿using InventoryAPI.Models;
-using OrderAPI.Models;
+﻿using Domain;
 
-namespace DataAccessLayer.Interfaces
+namespace DataAccessLayer.Interfaces;
+
+public interface IOrderRepository
 {
-    public interface IOrderRepository
-    {
-        ICollection<Order> GetOrders();
-        Order GetOrder(int id);
-        bool OrderExists(int id);
-        bool CreateOrder(Order order);
-        bool UpdateOrder(Order order);
-        bool DeleteOrder(Order order);
-        bool Save();
-    }
+    ICollection<Order> GetOrders();
+    Order GetOrder(int id);
+    bool OrderExists(int id);
+    bool CreateOrder(Order order);
+    bool UpdateOrder(Order order);
+    bool DeleteOrder(Order order);
+    bool Save();
 }

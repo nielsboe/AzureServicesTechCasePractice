@@ -1,6 +1,7 @@
 ﻿using Azure.Messaging.ServiceBus;
+using DataAccessLayer.Interfaces;
+using Domain;
 using Microsoft.AspNetCore.Mvc;
-using OrderAPI.Models;
 using System.Text.Json;
 
 namespace OrderAPI.Controllers
@@ -10,37 +11,39 @@ namespace OrderAPI.Controllers
     public class OrderController : Controller
     {
         private readonly IConfiguration _config;
+        private readonly IOrderRepository _orderRepository;
 
-        public OrderController(IConfiguration config)
+        public OrderController(IConfiguration config, IOrderRepository orderRepository)
         {
-            this._config = config;
+            _config = config;
+            _orderRepository = orderRepository;
         }
 
-        [HttpGet]
+        [HttpGet("GetOrder")]
         public Order GetOrder(int orderId)
         {
             return _orderRepository.GetOrder(orderId);
         }
 
-        [HttpPost]
+        [HttpPost("CreateOrder")]
         public async Task CreateOrder(Order order)
         {
             Post(order, "create-order");
         }
 
-        [HttpPost]
+        [HttpPost("UpdateOrder")]
         public async Task UpdateOrder(Order order)
         {
             Post(order, "update-order");
         }
 
-        [HttpPost]
+        [HttpPost("DeleteOrder")]
         public async Task DeleteOrder(Order order)
         {
             Post(order, "delete-order");
         }
 
-        [HttpPost]
+        [HttpPost("SendOrderMessage")]
         public async Task Post(Order order, string task)
         {
             var connectionString = _config.GetConnectionString("ServiceBusEndpoint");

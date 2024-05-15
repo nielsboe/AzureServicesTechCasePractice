@@ -1,6 +1,6 @@
 ﻿using Azure.Messaging.ServiceBus;
+using Domain;
 using Microsoft.AspNetCore.Mvc;
-using OrderAPI.Models;
 using System.Text.Json;
 
 namespace AzureServiceBusQueue.Controllers
