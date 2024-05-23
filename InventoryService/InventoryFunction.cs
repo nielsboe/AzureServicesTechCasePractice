@@ -1,5 +1,7 @@
 using Azure.Messaging.ServiceBus;
 using Domain;
+using Google.Protobuf.Reflection;
+using Google.Protobuf.WellKnownTypes;
 using Microsoft.Azure.Functions.Worker;
 using Microsoft.Extensions.Logging;
 using System.Text.Json;
@@ -25,14 +27,7 @@ namespace InventoryService2
             // Check if the message body is null or empty
             if (message.Body == null)
             {
-                _logger.LogError("Received an empty message body.");
-                await messageActions.DeadLetterMessageAsync(message,
-                    new Dictionary<string, object>
-                    {
-                            { "DeadLetterReason", "EmptyMessageBody" },
-                            { "DeadLetterErrorDescription", "The message body was empty." }
-                    });
-                return;
+                MessageBodyIsEmptyError(message, messageActions);
             }
 
             // Get the message body as a string
@@ -43,23 +38,16 @@ namespace InventoryService2
 
             if (product == null)
             {
-                _logger.LogError("Received an empty message body.");
-                await messageActions.DeadLetterMessageAsync(message,
-                    new Dictionary<string, object>
-                    {
-                            { "DeadLetterReason", "NullProduct" },
-                            { "DeadLetterErrorDescription", "The product was null." }
-                    });
-                return;
+                ProductIsEmptyError(message, messageActions);
             }
 
             // Log the product details
-            _logger.LogInformation("Received Product:");
-            _logger.LogInformation("Id: {Id}", product.Id);
-            _logger.LogInformation("ProductId: {ProductId}", product.ProductId);
-            _logger.LogInformation("Name: {Name}", product.Name);
-            _logger.LogInformation("Description: {Description}", product.Description);
-            _logger.LogInformation("Price: {Price}", product.Price);
+            _logger.LogInformation("Received Product: \n, " +
+                "Id: {Id}\\", product.Id + "\n," +
+                "ProductId: {ProductId}", product.ProductId + "\n," +
+                "Name: {Name}", product.Name + "\n," +
+                "Description: {Description}", product.Description + "\n," +
+                "Price: {Price}", product.Price);
 
             // Complete the message
             await messageActions.CompleteMessageAsync(message);
@@ -75,14 +63,7 @@ namespace InventoryService2
             // Check if the message body is null or empty
             if (message.Body == null)
             {
-                _logger.LogError("Received an empty message body.");
-                await messageActions.DeadLetterMessageAsync(message,
-                    new Dictionary<string, object>
-                    {
-                            { "DeadLetterReason", "EmptyMessageBody" },
-                            { "DeadLetterErrorDescription", "The message body was empty." }
-                    });
-                return;
+                await MessageBodyIsEmptyError(message, messageActions);
             }
 
             // Get the message body as a string
@@ -93,23 +74,16 @@ namespace InventoryService2
 
             if (product == null)
             {
-                _logger.LogError("Received an empty message body.");
-                await messageActions.DeadLetterMessageAsync(message,
-                    new Dictionary<string, object>
-                    {
-                            { "DeadLetterReason", "NullProduct" },
-                            { "DeadLetterErrorDescription", "The product was null." }
-                    });
-                return;
+                await ProductIsEmptyError(message, messageActions);
             }
 
             // Log the product details
-            _logger.LogInformation("Received Product:");
-            _logger.LogInformation("Id: {Id}", product.Id);
-            _logger.LogInformation("ProductId: {ProductId}", product.ProductId);
-            _logger.LogInformation("Name: {Name}", product.Name);
-            _logger.LogInformation("Description: {Description}", product.Description);
-            _logger.LogInformation("Price: {Price}", product.Price);
+            _logger.LogInformation("Received Product: \n, " +
+                "Id: {Id}\\", product.Id + "\n," +
+                "ProductId: {ProductId}", product.ProductId + "\n," +
+                "Name: {Name}", product.Name + "\n," +
+                "Description: {Description}", product.Description + "\n," +
+                "Price: {Price}", product.Price);
 
             // Complete the message
             await messageActions.CompleteMessageAsync(message);
@@ -125,14 +99,7 @@ namespace InventoryService2
             // Check if the message body is null or empty
             if (message.Body == null)
             {
-                _logger.LogError("Received an empty message body.");
-                await messageActions.DeadLetterMessageAsync(message,
-                    new Dictionary<string, object>
-                    {
-                            { "DeadLetterReason", "EmptyMessageBody" },
-                            { "DeadLetterErrorDescription", "The message body was empty." }
-                    });
-                return;
+                await MessageBodyIsEmptyError(message, messageActions);
             }
 
             // Get the message body as a string
@@ -143,26 +110,43 @@ namespace InventoryService2
 
             if (product == null)
             {
-                _logger.LogError("Received an empty message body.");
-                await messageActions.DeadLetterMessageAsync(message,
-                    new Dictionary<string, object>
-                    {
-                            { "DeadLetterReason", "NullProduct" },
-                            { "DeadLetterErrorDescription", "The product was null." }
-                    });
-                return;
+                await ProductIsEmptyError(message, messageActions);
             }
 
             // Log the product details
-            _logger.LogInformation("Received Product:");
-            _logger.LogInformation("Id: {Id}", product.Id);
-            _logger.LogInformation("ProductId: {ProductId}", product.ProductId);
-            _logger.LogInformation("Name: {Name}", product.Name);
-            _logger.LogInformation("Description: {Description}", product.Description);
-            _logger.LogInformation("Price: {Price}", product.Price);
+            _logger.LogInformation("Received Product: \n, " +
+                "Id: {Id}\\", product.Id + "\n," +
+                "ProductId: {ProductId}", product.ProductId + "\n," +
+                "Name: {Name}", product.Name + "\n," +
+                "Description: {Description}", product.Description + "\n," +
+                "Price: {Price}", product.Price);
 
             // Complete the message
             await messageActions.CompleteMessageAsync(message);
+        }
+
+        public async Task MessageBodyIsEmptyError(ServiceBusReceivedMessage message, ServiceBusMessageActions messageActions)
+        {
+            _logger.LogError("Received an empty message body.");
+            await messageActions.DeadLetterMessageAsync(message,
+                new Dictionary<string, object>
+                {
+                            { "DeadLetterReason", "EmptyMessageBody" },
+                            { "DeadLetterErrorDescription", "The message body was empty." }
+                });
+            return;
+        }
+
+        public async Task ProductIsEmptyError(ServiceBusReceivedMessage message, ServiceBusMessageActions messageActions)
+        {
+            _logger.LogError("Received an empty message body.");
+            await messageActions.DeadLetterMessageAsync(message,
+                new Dictionary<string, object>
+                {
+                            { "DeadLetterReason", "NullProduct" },
+                            { "DeadLetterErrorDescription", "The product was null." }
+                });
+            return;
         }
     }
 }
