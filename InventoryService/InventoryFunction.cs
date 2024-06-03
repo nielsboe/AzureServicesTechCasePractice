@@ -78,12 +78,12 @@ namespace InventoryService2
             }
 
             // Log the product details
-            _logger.LogInformation("Received Product: \n, " +
-                "Id: {Id}\\", product.Id + "\n," +
-                "ProductId: {ProductId}", product.ProductId + "\n," +
-                "Name: {Name}", product.Name + "\n," +
-                "Description: {Description}", product.Description + "\n," +
-                "Price: {Price}", product.Price);
+            _logger.LogInformation($"Received Product: {Environment.NewLine} " +
+                $"Id: {product.Id}, {Environment.NewLine}" +
+                $"ProductId: {product.ProductId}, {Environment.NewLine}" +
+                $"Name: {product.Name} {Environment.NewLine}" +
+                $"Description: {product.Description} {Environment.NewLine}" +
+                $"Price: {product.Price}");
 
             // Complete the message
             await messageActions.CompleteMessageAsync(message);
@@ -114,12 +114,12 @@ namespace InventoryService2
             }
 
             // Log the product details
-            _logger.LogInformation("Received Product: \n, " +
-                "Id: {Id}\\", product.Id + "\n," +
-                "ProductId: {ProductId}", product.ProductId + "\n," +
-                "Name: {Name}", product.Name + "\n," +
-                "Description: {Description}", product.Description + "\n," +
-                "Price: {Price}", product.Price);
+            _logger.LogInformation($"Received Product: {Environment.NewLine} " +
+                $"Id: {product.Id}, {Environment.NewLine}" +
+                $"ProductId: {product.ProductId}, {Environment.NewLine}" +
+                $"Name: {product.Name} {Environment.NewLine}" +
+                $"Description: {product.Description} {Environment.NewLine}" +
+                $"Price: {product.Price}");
 
             // Complete the message
             await messageActions.CompleteMessageAsync(message);
