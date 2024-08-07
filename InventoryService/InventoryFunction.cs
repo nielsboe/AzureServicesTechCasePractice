@@ -1,7 +1,7 @@
 using Azure.Messaging.ServiceBus;
+using DataAccessLayer.Interfaces;
+using DataAccessLayer.Repositories;
 using Domain;
-using Google.Protobuf.Reflection;
-using Google.Protobuf.WellKnownTypes;
 using Microsoft.Azure.Functions.Worker;
 using Microsoft.Extensions.Logging;
 using System.Text.Json;
@@ -10,10 +10,12 @@ namespace InventoryService2
 {
     public class InventoryService
     {
+        private readonly IInventoryRepository _inventoryRepository;
         private readonly ILogger<InventoryService> _logger;
 
-        public InventoryService(ILogger<InventoryService> logger)
+        public InventoryService(ILogger<InventoryService> logger, IInventoryRepository inventoryRepository)
         {
+            _inventoryRepository = inventoryRepository;
             _logger = logger;
         }
 
@@ -27,27 +29,25 @@ namespace InventoryService2
             // Check if the message body is null or empty
             if (message.Body == null)
             {
-                MessageBodyIsEmptyError(message, messageActions);
+                await MessageBodyIsEmptyError(message, messageActions);
             }
 
             // Get the message body as a string
             string messageBody = message.Body.ToString();
 
             // Deserialize the message body into a Product object
-            Product product = JsonSerializer.Deserialize<Product>(messageBody);
+            ProductDTO? product = JsonSerializer.Deserialize<ProductDTO>(messageBody);
 
             if (product == null)
             {
-                ProductIsEmptyError(message, messageActions);
+                await ProductIsEmptyError(message, messageActions);
             }
 
             // Log the product details
-            _logger.LogInformation("Received Product: \n, " +
-                "Id: {Id}\\", product.Id + "\n," +
-                "ProductId: {ProductId}", product.ProductId + "\n," +
-                "Name: {Name}", product.Name + "\n," +
-                "Description: {Description}", product.Description + "\n," +
-                "Price: {Price}", product.Price);
+            LogDetails(product);
+
+            //Create the product in the database
+            _inventoryRepository.CreateProduct(product);
 
             // Complete the message
             await messageActions.CompleteMessageAsync(message);
@@ -70,7 +70,7 @@ namespace InventoryService2
             string messageBody = message.Body.ToString();
 
             // Deserialize the message body into a Product object
-            Product product = JsonSerializer.Deserialize<Product>(messageBody);
+            ProductDTO? product = JsonSerializer.Deserialize<ProductDTO>(messageBody);
 
             if (product == null)
             {
@@ -78,12 +78,10 @@ namespace InventoryService2
             }
 
             // Log the product details
-            _logger.LogInformation($"Received Product: {Environment.NewLine} " +
-                $"Id: {product.Id}, {Environment.NewLine}" +
-                $"ProductId: {product.ProductId}, {Environment.NewLine}" +
-                $"Name: {product.Name} {Environment.NewLine}" +
-                $"Description: {product.Description} {Environment.NewLine}" +
-                $"Price: {product.Price}");
+            LogDetails(product);
+
+            //Update the product in the database
+            _inventoryRepository.UpdateProduct(product);
 
             // Complete the message
             await messageActions.CompleteMessageAsync(message);
@@ -106,7 +104,7 @@ namespace InventoryService2
             string messageBody = message.Body.ToString();
 
             // Deserialize the message body into a Product object
-            Product product = JsonSerializer.Deserialize<Product>(messageBody);
+            ProductDTO product = JsonSerializer.Deserialize<ProductDTO>(messageBody);
 
             if (product == null)
             {
@@ -114,12 +112,10 @@ namespace InventoryService2
             }
 
             // Log the product details
-            _logger.LogInformation($"Received Product: {Environment.NewLine} " +
-                $"Id: {product.Id}, {Environment.NewLine}" +
-                $"ProductId: {product.ProductId}, {Environment.NewLine}" +
-                $"Name: {product.Name} {Environment.NewLine}" +
-                $"Description: {product.Description} {Environment.NewLine}" +
-                $"Price: {product.Price}");
+            LogDetails(product);
+
+            //Update the product in the database
+            _inventoryRepository.DeleteProduct(product);
 
             // Complete the message
             await messageActions.CompleteMessageAsync(message);
@@ -147,6 +143,16 @@ namespace InventoryService2
                             { "DeadLetterErrorDescription", "The product was null." }
                 });
             return;
+        }
+
+        public void LogDetails(ProductDTO product)
+        {
+            _logger.LogInformation($"Received Product: {Environment.NewLine} " +
+            $"Id: {product.Id}, {Environment.NewLine}" +
+            $"ProductId: {product.ProductId}, {Environment.NewLine}" +
+            $"Name: {product.Name} {Environment.NewLine}" +
+            $"Description: {product.Description} {Environment.NewLine}" +
+            $"Price: {product.Price}");
         }
     }
 }
