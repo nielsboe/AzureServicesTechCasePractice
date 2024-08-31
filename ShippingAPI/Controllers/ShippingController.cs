@@ -1,6 +1,8 @@
 ﻿using Azure.Messaging.ServiceBus;
 using DataAccessLayer.Interfaces;
 using Domain;
+using MapsterMapper;
+using MassTransit.Transports;
 using Microsoft.AspNetCore.Mvc;
 using System.Text.Json;
 
@@ -9,40 +11,42 @@ namespace ShippingAPI.Controllers
     public class ShippingController : Controller
     {
         private readonly IConfiguration _config;
+        private readonly IMapper _mapsterMapper;
         private readonly IShipmentRepository _shipmentRepository;
 
-        public ShippingController(IConfiguration config, IShipmentRepository shipmentRepository)
+        public ShippingController(IConfiguration config, IShipmentRepository shipmentRepository, IMapper mapsterMapper)
         {
             _config = config;
+            _mapsterMapper = mapsterMapper;
             _shipmentRepository = shipmentRepository;
         }
 
         [HttpGet("GetShipment")]
-        public Shipment GetShipment(int shipmentId)
+        public ShipmentDTO GetShipment(int shipmentId)
         {
-            return _shipmentRepository.GetShipment(shipmentId);
+            return _mapsterMapper.Map<ShipmentDTO>(_shipmentRepository.GetShipment(shipmentId));
         }
 
         [HttpPost("CreateShipment")]
-        public async Task CreateShipment(Shipment shipment)
+        public async Task CreateShipment(ShipmentDTO shipmentDTO)
         {
-            Post(shipment, "create-order");
+            await Post(shipmentDTO, "create-order");
         }
 
         [HttpPost("UpdateShipment")]
-        public async Task UpdateShipment(Shipment shipment)
+        public async Task UpdateShipment(ShipmentDTO shipmentDTO)
         {
-            Post(shipment, "update-order");
+            await Post(shipmentDTO, "update-order");
         }
 
         [HttpPost("DeleteShipment")]
-        public async Task DeleteShipment(Shipment shipment)
+        public async Task DeleteShipment(ShipmentDTO shipmentDTO)
         {
-            Post(shipment, "delete-order");
+            await Post(shipmentDTO, "delete-order");
         }
 
         [HttpPost("SendShipmentMessage")]
-        public async Task Post(Shipment shipment, string task)
+        public async Task Post(ShipmentDTO shipment, string task)
         {
             var connectionString = _config.GetConnectionString("ServiceBusEndpoint");
             var client = new ServiceBusClient(connectionString);

@@ -1,14 +1,18 @@
 ﻿using DataAccessLayer.Interfaces;
 using DataAccessLayer.Data;
 using Domain;
+using MapsterMapper;
 
 namespace DataAccessLayer.Repositories
 {
     public class InventoryRepository : IInventoryRepository
     {
         private readonly DataContext _context;
-        public InventoryRepository(DataContext context)
+        private readonly IMapper _mapsterMapper;
+
+        public InventoryRepository(DataContext context, IMapper mapsterMapper)
         {
+            _mapsterMapper = mapsterMapper;
             _context = context;
         }
 
@@ -27,21 +31,23 @@ namespace DataAccessLayer.Repositories
             return _context.Products.Where(p => p.Id == id).FirstOrDefault();
         }
 
-        public bool CreateProduct(Product product)
+        public bool CreateProduct(ProductDTO productDto)
         {
+            var product = _mapsterMapper.Map<Product>(productDto);
             _context.Products.Add(product);
-
             return Save();
         }
 
-        public bool UpdateProduct(Product product)
+        public bool UpdateProduct(ProductDTO productDto)
         {
+            var product = _mapsterMapper.Map<Product>(productDto);
             _context.Products.Update(product);
             return Save();
         }
 
-        public bool DeleteProduct(Product product)
+        public bool DeleteProduct(ProductDTO productDto)
         {
+            var product = _mapsterMapper.Map<Product>(productDto);
             _context.Products.Remove(product);
             return Save();
         }

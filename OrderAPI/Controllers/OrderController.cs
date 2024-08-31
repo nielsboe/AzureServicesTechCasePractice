@@ -1,6 +1,9 @@
 ﻿using Azure.Messaging.ServiceBus;
 using DataAccessLayer.Interfaces;
 using Domain;
+using Mapster;
+using MapsterMapper;
+using MassTransit.Transports;
 using Microsoft.AspNetCore.Mvc;
 using System.Text.Json;
 
@@ -12,39 +15,41 @@ namespace OrderAPI.Controllers
     {
         private readonly IConfiguration _config;
         private readonly IOrderRepository _orderRepository;
+        private readonly IMapper _mapsterMapper;
 
-        public OrderController(IConfiguration config, IOrderRepository orderRepository)
+        public OrderController(IConfiguration config, IOrderRepository orderRepository, IMapper mapsterMapper)
         {
             _config = config;
             _orderRepository = orderRepository;
+            _mapsterMapper = mapsterMapper;
         }
 
         [HttpGet("GetOrder")]
-        public Order GetOrder(int orderId)
+        public OrderDTO GetOrder(int orderId)
         {
-            return _orderRepository.GetOrder(orderId);
+            return _mapsterMapper.Map<OrderDTO>(_orderRepository.GetOrder(orderId));
         }
 
         [HttpPost("CreateOrder")]
-        public async Task CreateOrder(Order order)
+        public async Task CreateOrder(OrderDTO orderDTO)
         {
-            Post(order, "create-order");
+            await Post(orderDTO, "create-order");
         }
 
         [HttpPost("UpdateOrder")]
-        public async Task UpdateOrder(Order order)
+        public async Task UpdateOrder(OrderDTO orderDTO)
         {
-            Post(order, "update-order");
+            await Post(orderDTO, "update-order");
         }
 
         [HttpPost("DeleteOrder")]
-        public async Task DeleteOrder(Order order)
+        public async Task DeleteOrder(OrderDTO orderDTO)
         {
-            Post(order, "delete-order");
+            await Post(orderDTO, "delete-order");
         }
 
         [HttpPost("SendOrderMessage")]
-        public async Task Post(Order order, string task)
+        public async Task Post(OrderDTO order, string task)
         {
             var connectionString = _config.GetConnectionString("ServiceBusEndpoint");
             var client = new ServiceBusClient(connectionString);

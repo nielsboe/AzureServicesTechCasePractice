@@ -7,8 +7,8 @@ public interface IInventoryRepository
     ICollection<Product> GetProducts();
     Product GetProduct(int id);
     bool ProductExists(int id);
-    bool CreateProduct(Product product);
-    bool UpdateProduct(Product product);
-    bool DeleteProduct(Product product);
+    bool CreateProduct(ProductDTO product);
+    bool UpdateProduct(ProductDTO product);
+    bool DeleteProduct(ProductDTO product);
     bool Save();
 }

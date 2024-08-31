@@ -7,8 +7,8 @@ public interface IOrderRepository
     ICollection<Order> GetOrders();
     Order GetOrder(int id);
     bool OrderExists(int id);
-    bool CreateOrder(Order order);
-    bool UpdateOrder(Order order);
-    bool DeleteOrder(Order order);
+    bool CreateOrder(OrderDTO order);
+    bool UpdateOrder(OrderDTO order);
+    bool DeleteOrder(OrderDTO order);
     bool Save();
 }

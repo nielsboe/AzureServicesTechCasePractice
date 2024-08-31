@@ -1,6 +1,8 @@
 ﻿using Azure.Messaging.ServiceBus;
 using DataAccessLayer.Interfaces;
+using DataAccessLayer.Repositories;
 using Domain;
+using MapsterMapper;
 using Microsoft.AspNetCore.Mvc;
 using System.Text.Json;
 
@@ -12,40 +14,43 @@ namespace InventoryAPI.Controllers
     {
         private readonly IConfiguration _config;
         private readonly IInventoryRepository _inventoryRepository;
+        private readonly IMapper _mapsterMapper;
 
-        public InventoryController(IConfiguration config, IInventoryRepository inventoryRepository)
+        public InventoryController(IConfiguration config, IInventoryRepository inventoryRepository, IMapper mapsterMapper)
         {
             _config = config;
             _inventoryRepository = inventoryRepository;
+            _mapsterMapper = mapsterMapper;
         }
 
         [HttpGet("GetProduct")]
-        public Product GetProduct(int productId)
+        public ProductDTO GetProduct(int productId)
         {
-            return _inventoryRepository.GetProduct(productId);
+            return _mapsterMapper.Map<ProductDTO>(_inventoryRepository.GetProduct(productId));
         }
 
         [HttpPost("CreateProduct")]
-        public async Task CreateProduct(Product product)
+        public async Task CreateProduct(ProductDTO productDTO)
         {
-            Post(product, "create-product");
+            await Post(productDTO, "create-product");
         }
 
         [HttpPost("UpdateProduct")]
-        public async Task UpdateProduct(Product product)
+        public async Task UpdateProduct(ProductDTO productDTO)
         {
-            Post(product, "update-product");
+            await Post(productDTO, "update-product");
         }
 
         [HttpPost("DeleteProduct")]
-        public async Task DeleteProduct(Product product)
+        public async Task DeleteProduct(ProductDTO productDTO)
         {
-            Post(product, "delete-product");
+            await Post(productDTO, "delete-product");
         }
 
         [HttpPost("SendProductMessage")]
-        public async Task Post(Product product, string task)
+        public async Task Post(ProductDTO product, string task)
         {
+            //var connectionString = _config.GetConnectionString("Endpoint=sb://darwintechcase.servicebus.windows.net/;SharedAccessKeyName=RootManageSharedAccessKey;SharedAccessKey=9tVUSO5MIqQXAlsSCFvQUN6kVUJB0zlB6+ASbPwksdA=");
             var connectionString = _config.GetConnectionString("ServiceBusEndpoint");
             var client = new ServiceBusClient(connectionString);
             var sender = client.CreateSender(task);

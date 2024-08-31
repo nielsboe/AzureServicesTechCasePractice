@@ -1,6 +1,7 @@
 using DataAccessLayer.Data;
 using DataAccessLayer.Interfaces;
 using DataAccessLayer.Repositories;
+using MapsterMapper;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -16,7 +17,7 @@ builder.Services.AddDbContext<DataContext>(options =>
 {
     options.UseSqlServer(builder.Configuration.GetConnectionString("DatabaseConnectionString"));
 });
-
+builder.Services.AddTransient<IMapper, Mapper>();
 builder.Services.AddTransient<IShipmentRepository, ShipmentRepository>();
 
 var app = builder.Build();

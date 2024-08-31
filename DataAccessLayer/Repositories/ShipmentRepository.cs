@@ -1,15 +1,18 @@
 ﻿using DataAccessLayer.Data;
 using DataAccessLayer.Interfaces;
 using Domain;
+using MapsterMapper;
 
 namespace DataAccessLayer.Repositories
 {
     public class ShipmentRepository : IShipmentRepository
     {
         private readonly DataContext _context;
+        private readonly IMapper _mapsterMapper;
 
-        public ShipmentRepository(DataContext context)
+        public ShipmentRepository(DataContext context, IMapper mapsterMapper)
         {
+            _mapsterMapper = mapsterMapper;
             _context = context;
         }
 
@@ -28,21 +31,23 @@ namespace DataAccessLayer.Repositories
             return _context.Shipments.Where(p => p.Id == id).FirstOrDefault();
         }
 
-        public bool CreateShipment(Shipment shipment)
+        public bool CreateShipment(ShipmentDTO shipmentDto)
         {
+            var shipment = _mapsterMapper.Map<Shipment>(shipmentDto);
             _context.Shipments.Add(shipment);
-
             return Save();
         }
 
-        public bool UpdateShipment(Shipment shipment)
+        public bool UpdateShipment(ShipmentDTO shipmentDto)
         {
+            var shipment = _mapsterMapper.Map<Shipment>(shipmentDto);
             _context.Shipments.Update(shipment);
             return Save();
         }
 
-        public bool DeleteShipment(Shipment shipment)
+        public bool DeleteShipment(ShipmentDTO shipmentDto)
         {
+            var shipment = _mapsterMapper.Map<Shipment>(shipmentDto);
             _context.Shipments.Remove(shipment);
             return Save();
         }
