@@ -11,18 +11,11 @@ namespace OrderAPI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class OrderController : Controller
+    public class OrderController(IConfiguration config, IOrderRepository orderRepository, IMapper mapsterMapper) : Controller
     {
-        private readonly IConfiguration _config;
-        private readonly IOrderRepository _orderRepository;
-        private readonly IMapper _mapsterMapper;
-
-        public OrderController(IConfiguration config, IOrderRepository orderRepository, IMapper mapsterMapper)
-        {
-            _config = config;
-            _orderRepository = orderRepository;
-            _mapsterMapper = mapsterMapper;
-        }
+        private readonly IConfiguration _config = config;
+        private readonly IOrderRepository _orderRepository = orderRepository;
+        private readonly IMapper _mapsterMapper = mapsterMapper;
 
         [HttpGet("GetOrder")]
         public OrderDTO GetOrder(int orderId)

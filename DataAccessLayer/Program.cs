@@ -6,16 +6,15 @@ using Microsoft.EntityFrameworkCore;
 var builder = WebApplication.CreateBuilder(args);
 var app = builder.Build();
 
-app.MapGet("/", () => "Hello World!");
+app.MapControllers();
 
 builder.Services.AddDbContext<DataContext>(options =>
 {
     options.UseSqlServer(builder.Configuration.GetConnectionString("DatabaseConnectionString"));
 });
 
-builder.Services.AddTransient<IInventoryRepository, InventoryRepository>();
-builder.Services.AddTransient<IOrderRepository, OrderRepository>();
-builder.Services.AddTransient<IShipmentRepository, ShipmentRepository>();
-
+builder.Services.AddScoped<IInventoryRepository, InventoryRepository>();
+builder.Services.AddScoped<IOrderRepository, OrderRepository>();
+builder.Services.AddScoped<IShipmentRepository, ShipmentRepository>();
 
 app.Run();

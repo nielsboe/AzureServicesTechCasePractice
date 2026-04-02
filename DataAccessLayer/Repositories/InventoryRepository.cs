@@ -5,16 +5,10 @@ using MapsterMapper;
 
 namespace DataAccessLayer.Repositories
 {
-    public class InventoryRepository : IInventoryRepository
+    public class InventoryRepository(DataContext context, IMapper mapsterMapper) : IInventoryRepository
     {
-        private readonly DataContext _context;
-        private readonly IMapper _mapsterMapper;
-
-        public InventoryRepository(DataContext context, IMapper mapsterMapper)
-        {
-            _mapsterMapper = mapsterMapper;
-            _context = context;
-        }
+        private readonly DataContext _context = context;
+        private readonly IMapper _mapsterMapper = mapsterMapper;
 
         public bool ProductExists(int id)
         {
@@ -28,7 +22,7 @@ namespace DataAccessLayer.Repositories
 
         public Product GetProduct(int id)
         {
-            return _context.Products.Where(p => p.Id == id).FirstOrDefault();
+            return _context.Products.Where(p => p.Id == id).FirstOrDefault() ?? throw new Exception("Product not found");
         }
 
         public bool CreateProduct(ProductDTO productDto)

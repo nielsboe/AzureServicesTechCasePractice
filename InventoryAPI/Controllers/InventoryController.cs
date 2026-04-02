@@ -1,6 +1,5 @@
 ﻿using Azure.Messaging.ServiceBus;
 using DataAccessLayer.Interfaces;
-using DataAccessLayer.Repositories;
 using Domain;
 using MapsterMapper;
 using Microsoft.AspNetCore.Mvc;
@@ -10,18 +9,11 @@ namespace InventoryAPI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class InventoryController : Controller
+    public class InventoryController(IConfiguration config, IInventoryRepository inventoryRepository, IMapper mapsterMapper) : Controller
     {
-        private readonly IConfiguration _config;
-        private readonly IInventoryRepository _inventoryRepository;
-        private readonly IMapper _mapsterMapper;
-
-        public InventoryController(IConfiguration config, IInventoryRepository inventoryRepository, IMapper mapsterMapper)
-        {
-            _config = config;
-            _inventoryRepository = inventoryRepository;
-            _mapsterMapper = mapsterMapper;
-        }
+        private readonly IConfiguration _config = config;
+        private readonly IInventoryRepository _inventoryRepository = inventoryRepository;
+        private readonly IMapper _mapsterMapper = mapsterMapper;
 
         [HttpGet("GetProduct")]
         public ProductDTO GetProduct(int productId)
@@ -50,7 +42,6 @@ namespace InventoryAPI.Controllers
         [HttpPost("SendProductMessage")]
         public async Task Post(ProductDTO product, string task)
         {
-            //var connectionString = _config.GetConnectionString("Endpoint=sb://darwintechcase.servicebus.windows.net/;SharedAccessKeyName=RootManageSharedAccessKey;SharedAccessKey=9tVUSO5MIqQXAlsSCFvQUN6kVUJB0zlB6+ASbPwksdA=");
             var connectionString = _config.GetConnectionString("ServiceBusEndpoint");
             var client = new ServiceBusClient(connectionString);
             var sender = client.CreateSender(task);

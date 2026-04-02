@@ -5,16 +5,11 @@ using MapsterMapper;
 
 namespace DataAccessLayer.Repositories
 {
-    public class OrderRepository : IOrderRepository
+    public class OrderRepository(DataContext context, IMapper mapsterMapper) : IOrderRepository
     {
-        private readonly DataContext _context;
-        private readonly IMapper _mapsterMapper;
+        private readonly DataContext _context = context;
+        private readonly IMapper _mapsterMapper = mapsterMapper;
 
-        public OrderRepository(DataContext context, IMapper mapsterMapper)
-        {
-            _mapsterMapper = mapsterMapper;
-            _context = context;
-        }
         public bool OrderExists(int id)
         {
             return _context.Orders.Any(o => o.Id == id);
@@ -33,7 +28,7 @@ namespace DataAccessLayer.Repositories
 
         public Order GetOrder(int id)
         {
-            return _context.Orders.Where(o => o.Id == id).FirstOrDefault();
+            return _context.Orders.Where(o => o.Id == id).FirstOrDefault() ?? throw new Exception("Order not found");
         }
 
         public bool UpdateOrder(OrderDTO orderDto)

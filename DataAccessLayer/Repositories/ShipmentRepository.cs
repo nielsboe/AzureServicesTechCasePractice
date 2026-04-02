@@ -5,16 +5,10 @@ using MapsterMapper;
 
 namespace DataAccessLayer.Repositories
 {
-    public class ShipmentRepository : IShipmentRepository
+    public class ShipmentRepository(DataContext context, IMapper mapsterMapper) : IShipmentRepository
     {
-        private readonly DataContext _context;
-        private readonly IMapper _mapsterMapper;
-
-        public ShipmentRepository(DataContext context, IMapper mapsterMapper)
-        {
-            _mapsterMapper = mapsterMapper;
-            _context = context;
-        }
+        private readonly DataContext _context = context;
+        private readonly IMapper _mapsterMapper = mapsterMapper;
 
         public bool ShipmentExists(int id)
         {
@@ -28,7 +22,7 @@ namespace DataAccessLayer.Repositories
 
         public Shipment GetShipment(int id)
         {
-            return _context.Shipments.Where(p => p.Id == id).FirstOrDefault();
+            return _context.Shipments.FirstOrDefault(p => p.Id == id) ?? throw new Exception("Shipment not found");
         }
 
         public bool CreateShipment(ShipmentDTO shipmentDto)

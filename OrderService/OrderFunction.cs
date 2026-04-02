@@ -10,16 +10,10 @@ using Microsoft.Extensions.Logging;
 
 namespace OrderService;
 
-public class OrderFunction
+public class OrderFunction(ILogger<OrderFunction> logger, IOrderRepository orderRepository)
 {
-    private readonly IOrderRepository _orderRepository;
-    private readonly ILogger<OrderFunction> _logger;
-
-    public OrderFunction(ILogger<OrderFunction> logger, IOrderRepository orderRepository)
-    {
-        _orderRepository = orderRepository;
-        _logger = logger;
-    }
+    private readonly IOrderRepository _orderRepository = orderRepository;
+    private readonly ILogger<OrderFunction> _logger = logger;
 
     //Listener function for creating the order
     [Function("CreateOrder")]
@@ -32,6 +26,7 @@ public class OrderFunction
         if (message.Body == null)
         {
             await MessageBodyIsEmptyError(message, messageActions);
+            return;
         }
 
         string messageBody = message.Body.ToString();
@@ -42,6 +37,7 @@ public class OrderFunction
         if (order == null)
         {
             await OrderIsEmptyError(message, messageActions);
+            return;
         }
 
         // Log the order details
@@ -65,6 +61,7 @@ public class OrderFunction
         if (message.Body == null)
         {
             await MessageBodyIsEmptyError(message, messageActions);
+            return;
         }
 
         string messageBody = message.Body.ToString();
@@ -75,6 +72,7 @@ public class OrderFunction
         if (order == null)
         {
             await OrderIsEmptyError(message, messageActions);
+            return;
         }
 
         // Log the order details
@@ -98,6 +96,7 @@ public class OrderFunction
         if (message.Body == null)
         {
             await MessageBodyIsEmptyError(message, messageActions);
+            return;
         }
 
         string messageBody = message.Body.ToString();
@@ -108,6 +107,7 @@ public class OrderFunction
         if (order == null)
         {
             await OrderIsEmptyError(message, messageActions);
+            return;
         }
 
         // Log the order details
@@ -146,13 +146,21 @@ public class OrderFunction
 
     public void LogDetails(OrderDTO order)
     {
-        _logger.LogInformation($"Received Order: {Environment.NewLine} " +
-        $"Id: {order.Id}, {Environment.NewLine}" +
-        $"OrderId: {order.OrderId}, {Environment.NewLine}" +
-        $"CustomerName: {order.CustomerName} {Environment.NewLine}" +
-        $"OrderDate: {order.OrderDate} {Environment.NewLine}" +
-        $"Shipped: {order.IsShipped} {Environment.NewLine}" +
-        $"Amount of products: {order.Products.Count} {Environment.NewLine}" +
-        $"Price: {order.TotalOrderPrice}");
+        _logger.LogInformation(
+            "Received Order:\n" +
+            "Id: {Id}\n" +
+            "OrderId: {ProductId}\n" +
+            "CustomerName: {Name}\n" +
+            "OrderDate: {OrderDate}\n" +
+            "Shipped: {IsShipped}\n" +
+            "Amount of products: {Products.Count}\n" +
+            "Price: {TotalOrderPrice}\n",
+            order.Id,
+            order.OrderId,
+            order.CustomerName,
+            order.OrderDate,
+            order.IsShipped,
+            order.Products.Count,
+            order.TotalOrderPrice);
     }
 }

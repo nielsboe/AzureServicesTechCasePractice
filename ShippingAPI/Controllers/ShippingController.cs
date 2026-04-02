@@ -8,18 +8,11 @@ using System.Text.Json;
 
 namespace ShippingAPI.Controllers
 {
-    public class ShippingController : Controller
+    public class ShippingController(IConfiguration config, IShipmentRepository shipmentRepository, IMapper mapsterMapper) : Controller
     {
-        private readonly IConfiguration _config;
-        private readonly IMapper _mapsterMapper;
-        private readonly IShipmentRepository _shipmentRepository;
-
-        public ShippingController(IConfiguration config, IShipmentRepository shipmentRepository, IMapper mapsterMapper)
-        {
-            _config = config;
-            _mapsterMapper = mapsterMapper;
-            _shipmentRepository = shipmentRepository;
-        }
+        private readonly IConfiguration _config = config;
+        private readonly IMapper _mapsterMapper = mapsterMapper;
+        private readonly IShipmentRepository _shipmentRepository = shipmentRepository;
 
         [HttpGet("GetShipment")]
         public ShipmentDTO GetShipment(int shipmentId)

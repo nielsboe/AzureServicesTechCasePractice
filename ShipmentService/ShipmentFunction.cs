@@ -8,16 +8,10 @@ using System.Text.Json;
 
 namespace ShipmentService
 {
-    public class ShipmentFunction
+    public class ShipmentFunction(ILogger<ShipmentFunction> logger, IShipmentRepository shipmentRepository)
     {
-        private readonly IShipmentRepository _shipmentRepository;
-        private readonly ILogger<ShipmentFunction> _logger;
-
-        public ShipmentFunction(ILogger<ShipmentFunction> logger, IShipmentRepository shipmentRepository)
-        {
-            _shipmentRepository = shipmentRepository;
-            _logger = logger;
-        }
+        private readonly IShipmentRepository _shipmentRepository = shipmentRepository;
+        private readonly ILogger<ShipmentFunction> _logger = logger;
 
         //Listener function for creating the shipment
         [Function("CreateShipment")]
@@ -30,6 +24,7 @@ namespace ShipmentService
             if (message.Body == null)
             {
                 await MessageBodyIsEmptyError(message, messageActions);
+                return;
             }
 
             string messageBody = message.Body.ToString();
@@ -40,6 +35,7 @@ namespace ShipmentService
             if (shipment == null)
             {
                 await ShipmentIsEmptyError(message, messageActions);
+                return;
             }
 
             //Create the shipment in the database
@@ -63,6 +59,7 @@ namespace ShipmentService
             if (message.Body == null)
             {
                 await MessageBodyIsEmptyError(message, messageActions);
+                return;
             }
 
             string messageBody = message.Body.ToString();
@@ -73,6 +70,7 @@ namespace ShipmentService
             if (shipment == null)
             {
                 await ShipmentIsEmptyError(message, messageActions);
+                return;
             }
 
             //Update the shipment in the database
@@ -96,6 +94,7 @@ namespace ShipmentService
             if (message.Body == null)
             {
                 await MessageBodyIsEmptyError(message, messageActions);
+                return;
             }
 
             string messageBody = message.Body.ToString();
@@ -106,6 +105,7 @@ namespace ShipmentService
             if (shipment == null)
             {
                 await ShipmentIsEmptyError(message, messageActions);
+                return;
             }
 
             //Delete the shipment in the database
@@ -143,11 +143,16 @@ namespace ShipmentService
 
         private void LogDetails(ShipmentDTO shipment)
         {
-            _logger.LogInformation($"Received Product: {Environment.NewLine} " +
-            $"Id: {shipment.Id}, {Environment.NewLine}" +
-            $"OrderId: {shipment.OrderId}, {Environment.NewLine}" +
-            $"Shipping address: {shipment.ShipmentAddress} {Environment.NewLine}" +
-            $"Shipping date: {shipment.ShipmentDate} {Environment.NewLine}");
+            _logger.LogInformation(
+                "Received Shipment:\n" +
+                "Id: {Id}\n" +
+                "OrderId: {OrderId}\n" +
+                "ShipmentAddress: {ShipmentAddress}\n" +
+                "ShipmentDate: {ShipmentDate}\n",
+                shipment.Id,
+                shipment.OrderId,
+                shipment.ShipmentAddress,
+                shipment.ShipmentDate);
         }
     }
 }

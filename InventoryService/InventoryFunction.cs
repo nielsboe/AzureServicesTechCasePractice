@@ -4,20 +4,16 @@ using DataAccessLayer.Repositories;
 using Domain;
 using Microsoft.Azure.Functions.Worker;
 using Microsoft.Extensions.Logging;
+using System.Text;
 using System.Text.Json;
 
 namespace InventoryService
 {
-    public class InventoryService
+    public class InventoryService(ILogger<InventoryService> logger, IInventoryRepository inventoryRepository)
     {
-        private readonly IInventoryRepository _inventoryRepository;
-        private readonly ILogger<InventoryService> _logger;
-
-        public InventoryService(ILogger<InventoryService> logger, IInventoryRepository inventoryRepository)
-        {
-            _inventoryRepository = inventoryRepository;
-            _logger = logger;
-        }
+        private readonly IInventoryRepository _inventoryRepository = inventoryRepository;
+        private readonly ILogger<InventoryService> _logger = logger;
+        private StringBuilder _stringBuilder = new StringBuilder();
 
         //Listener function for creating the product
         [Function("CreateProduct")]
@@ -30,6 +26,7 @@ namespace InventoryService
             if (message.Body == null)
             {
                 await MessageBodyIsEmptyError(message, messageActions);
+                return;
             }
 
             // Get the message body as a string
@@ -41,6 +38,7 @@ namespace InventoryService
             if (product == null)
             {
                 await ProductIsEmptyError(message, messageActions);
+                return;
             }
 
             // Log the product details
@@ -64,6 +62,7 @@ namespace InventoryService
             if (message.Body == null)
             {
                 await MessageBodyIsEmptyError(message, messageActions);
+                return;
             }
 
             // Get the message body as a string
@@ -75,6 +74,7 @@ namespace InventoryService
             if (product == null)
             {
                 await ProductIsEmptyError(message, messageActions);
+                return;
             }
 
             // Log the product details
@@ -98,17 +98,19 @@ namespace InventoryService
             if (message.Body == null)
             {
                 await MessageBodyIsEmptyError(message, messageActions);
+                return;
             }
 
             // Get the message body as a string
             string messageBody = message.Body.ToString();
 
             // Deserialize the message body into a Product object
-            ProductDTO product = JsonSerializer.Deserialize<ProductDTO>(messageBody);
+            ProductDTO? product = JsonSerializer.Deserialize<ProductDTO>(messageBody);
 
             if (product == null)
             {
                 await ProductIsEmptyError(message, messageActions);
+                return;
             }
 
             // Log the product details
@@ -147,12 +149,18 @@ namespace InventoryService
 
         public void LogDetails(ProductDTO product)
         {
-            _logger.LogInformation($"Received Product: {Environment.NewLine} " +
-            $"Id: {product.Id}, {Environment.NewLine}" +
-            $"ProductId: {product.ProductId}, {Environment.NewLine}" +
-            $"Name: {product.Name} {Environment.NewLine}" +
-            $"Description: {product.Description} {Environment.NewLine}" +
-            $"Price: {product.Price}");
+            _logger.LogInformation(
+                "Received Product:\n" +
+                "Id: {Id}\n" +
+                "ProductId: {ProductId}\n" +
+                "Name: {Name}\n" +
+                "Description: {Description}\n" +
+                "Price: {Price}",
+                product.Id,
+                product.ProductId,
+                product.Name,
+                product.Description,
+                product.Price);
         }
     }
 }
