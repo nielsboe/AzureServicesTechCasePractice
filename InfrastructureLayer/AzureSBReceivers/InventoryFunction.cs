@@ -1,7 +1,7 @@
 using Azure.Messaging.ServiceBus;
-using DataAccessLayer.Interfaces;
+using ApplicationLayer.Interfaces;
 using DataAccessLayer.Repositories;
-using Domain;
+using InfrastructureLayer.Repositories;
 using Microsoft.Azure.Functions.Worker;
 using Microsoft.Extensions.Logging;
 using System.Text;

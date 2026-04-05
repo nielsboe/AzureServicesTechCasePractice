@@ -1,4 +1,4 @@
-﻿namespace Domain;
+﻿namespace ApplicationLayer;
 
 public class ShipmentDTO
 {

@@ -1,4 +1,9 @@
-﻿namespace InfrastructureLayer.AzureSBSenders
+﻿using Azure.Messaging.ServiceBus;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Configuration;
+using System.Text.Json;
+
+namespace InfrastructureLayer.AzureSBSenders
 {
     public class InventorySender(IConfiguration config) : Controller
     {
