@@ -1,9 +1,0 @@
-{
-  "profiles": {
-    "InventoryService2": {
-      "commandName": "Project",
-      "commandLineArgs": "--port 7229",
-      "launchBrowser": false
-    }
-  }
-}
