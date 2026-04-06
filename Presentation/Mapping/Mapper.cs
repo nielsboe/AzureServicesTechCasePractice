@@ -9,7 +9,7 @@ namespace Presentation.Mapping
         private readonly IMapper _mapper = mapsterMapper;
         public ProductDTO mapProductDTO(Product product)
         {
-            return _mapper.Map<ProductDTO>(product);
+            
         }
 
         public OrderDTO mapOrderDTO(Order order)

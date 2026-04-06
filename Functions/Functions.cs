@@ -1,49 +1,148 @@
+using Application2.Products;
 using Azure.Messaging.ServiceBus;
+using Domain2;
 using Microsoft.Azure.WebJobs;
 using Microsoft.Azure.WebJobs.ServiceBus;
 using Microsoft.Extensions.Logging;
 using System.Text.Json;
+using Workers.DTOs.Orders;
+using Application2.Orders;
+using Workers.DTOs.Products;
 
 namespace Functions;
 
-public class Functions(ILogger<Functions> logger)
+public class Functions(ILogger<Functions> logger, IProductHandler productHandler, IOrderHandler orderHandler)
 {
     private readonly ILogger<Functions> _logger = logger;
+    private readonly IProductHandler _productHandler = productHandler;
+    private readonly IOrderHandler _orderHandler = orderHandler;
+
+    #region Products
 
     // Listener function for creating the product
     [FunctionName("CreateProduct")]
     public async Task CreateProduct(
         [ServiceBusTrigger("create-product", Connection = "ServiceBusEndpoint")]
         ServiceBusReceivedMessage message,
-        ServiceBusMessageActions messageActions)
+        ServiceBusMessageActions messageActions,
+        CancellationToken cancellationToken)
     {
-        // Check if the message body is null or empty
-        if (message.Body == null)
-        {
-            await  MessageBodyIsEmptyError(message, messageActions);
-            return;
-        }
-
         // Get the message body as a string
         string messageBody = message.Body.ToString();
 
         // Deserialize the message body into a Product object
-        ProductDTO? product = JsonSerializer.Deserialize<ProductDTO>(messageBody);
+        var productDto = JsonSerializer.Deserialize<CreateProductDto>(messageBody);
 
-        if (product == null)
-        {
-            await ProductIsEmptyError(message, messageActions);
-            return;
-        }
-
-        // Log the product details
-        LogDetails(product);
-
-        //Create the product in the database
-        _inventoryRepository.CreateProduct(product);
+        await _productHandler.Create(CreateProductDto.Map(productDto), cancellationToken); 
 
         // Complete the message
-        await messageActions.CompleteMessageAsync(message);
+        await messageActions.CompleteMessageAsync(message, cancellationToken);
     }
+
+    // Listener function for updating the product
+    [FunctionName("UpdateProduct")]
+    public async Task UpdateProduct(
+        [ServiceBusTrigger("update-product", Connection = "ServiceBusEndpoint")]
+        ServiceBusReceivedMessage message,
+        ServiceBusMessageActions messageActions,
+        CancellationToken cancellationToken)
+    {
+        // Get the message body as a string
+        string messageBody = message.Body.ToString();
+
+        // Deserialize the message body into a Product object
+        var productDto = JsonSerializer.Deserialize<UpdateProductDto>(messageBody);
+
+        await _productHandler.Update(UpdateProductDto.Map(productDto));
+
+        // Complete the message
+        await messageActions.CompleteMessageAsync(message, cancellationToken);
+    }
+
+    // Listener function for updating the product
+    [FunctionName("DeleteProduct")]
+    public async Task DeleteProduct(
+        [ServiceBusTrigger("update-product", Connection = "ServiceBusEndpoint")]
+        ServiceBusReceivedMessage message,
+        ServiceBusMessageActions messageActions,
+        CancellationToken cancellationToken)
+    {
+        // Get the message body as a string
+        string messageBody = message.Body.ToString();
+
+        // Deserialize the message body into a Product object
+        var productDto = JsonSerializer.Deserialize<DeleteProductDto>(messageBody);
+
+        await _productHandler.Delete(productDto.Name);
+
+        // Complete the message
+        await messageActions.CompleteMessageAsync(message, cancellationToken);
+    }
+
+    #endregion
+
+    #region Orders
+    // Listener function for creating the order
+    [FunctionName("CreateOrder")]
+    public async Task CreateOrder(
+        [ServiceBusTrigger("create-order", Connection = "ServiceBusEndpoint")]
+        ServiceBusReceivedMessage message,
+        ServiceBusMessageActions messageActions,
+        CancellationToken cancellationToken)
+    {
+        // Get the message body as a string
+        string messageBody = message.Body.ToString();
+
+        // Deserialize the message body into an order DTO
+        var orderDto = JsonSerializer.Deserialize<CreateOrderDto>(messageBody);
+
+        await _orderHandler.Create(CreateOrderDto.Map(orderDto), cancellationToken);
+
+        // Complete the message
+        await messageActions.CompleteMessageAsync(message, cancellationToken);
+    }
+
+    // Listener function for updating the order
+    [FunctionName("UpdateOrder")]
+    public async Task UpdateOrder(
+        [ServiceBusTrigger("update-order", Connection = "ServiceBusEndpoint")]
+        ServiceBusReceivedMessage message,
+        ServiceBusMessageActions messageActions,
+        CancellationToken cancellationToken)
+    {
+        // Get the message body as a string
+        string messageBody = message.Body.ToString();
+
+        // Deserialize the message body into an order DTO
+        var orderDto = JsonSerializer.Deserialize<UpdateOrderDto>(messageBody);
+
+        await _orderHandler.Update(UpdateOrderDto.Map(orderDto));
+
+        // Complete the message
+        await messageActions.CompleteMessageAsync(message, cancellationToken);
+    }
+
+    // Listener function for deleting the order
+    [FunctionName("DeleteOrder")]
+    public async Task DeleteOrder(
+        [ServiceBusTrigger("delete-order", Connection = "ServiceBusEndpoint")]
+        ServiceBusReceivedMessage message,
+        ServiceBusMessageActions messageActions,
+        CancellationToken cancellationToken)
+    {
+        // Get the message body as a string
+        string messageBody = message.Body.ToString();
+
+        // Deserialize the message body into a delete DTO
+        var orderDto = JsonSerializer.Deserialize<DeleteOrderDto>(messageBody);
+
+        await _orderHandler.Delete(orderDto.CustomerName);
+
+        // Complete the message
+        await messageActions.CompleteMessageAsync(message, cancellationToken);
+    }
+
+
+    #endregion
 
 }

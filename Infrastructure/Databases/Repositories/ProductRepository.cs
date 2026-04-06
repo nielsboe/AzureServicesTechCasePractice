@@ -1,25 +1,25 @@
 using Domain2;
 using Domain2.Interfaces;
+using Microsoft.EntityFrameworkCore;
 
 namespace Infrastructure.Databases.Repositories;
 
-public class InventoryRepository(DataContext context) : IProductRepository
+public class ProductRepository(DataContext context) : IProductRepository
 {
     private readonly DataContext _context = context;
 
-    public bool Exists(int id)
+    public async Task<ICollection<Product>> All()
     {
-        return _context.Products.Any(p => p.Id == id);
+        return await _context.Products.OrderBy(p => p.Id)
+            .AsNoTracking()
+            .ToListAsync();
     }
 
-    public ICollection<Product> All()
+    public async Task<Product> Get(int id)
     {
-        return _context.Products.OrderBy(p => p.Id).ToList();
-    }
-
-    public Product Get(int id)
-    {
-        return _context.Products.FirstOrDefault(p => p.Id == id) ?? throw new Exception("Product not found");
+        return await _context.Products
+            .AsNoTracking()
+            .SingleAsync(p => p.Id == id);
     }
 
     public async Task<int> Create(Product product, CancellationToken cancellationToken)
@@ -36,8 +36,9 @@ public class InventoryRepository(DataContext context) : IProductRepository
         _context.SaveChanges();
     }
 
-    public async Task Delete(Product product)
+    public async Task Delete(string name)
     {
+        var product = _context.Products.Single(p => p.Name == name);
         _context.Products.Remove(product);
         _context.SaveChanges();
     }
