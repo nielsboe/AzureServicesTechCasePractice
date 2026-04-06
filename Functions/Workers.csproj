@@ -19,6 +19,16 @@
     <PackageReference Include="Microsoft.Azure.WebJobs.Extensions.ServiceBus" Version="5.17.0" />
   </ItemGroup>
 
+  <!-- Ensure a minimal functions.metadata exists for the Functions host. Some tools look under net9.0 even when building for net8.0. -->
+  <Target Name="WriteFunctionsMetadata" AfterTargets="Build">
+    <PropertyGroup>
+      <ExpectedNet9Dir>$(MSBuildProjectDirectory)\bin\$(Configuration)\net9.0</ExpectedNet9Dir>
+    </PropertyGroup>
+    <MakeDir Directories="$(ExpectedNet9Dir)" />
+    <WriteLinesToFile File="$(ExpectedNet9Dir)\functions.metadata" Lines="[]" Overwrite="true" Encoding="UTF-8" />
+    <WriteLinesToFile File="$(OutputPath)functions.metadata" Lines="[]" Overwrite="true" Encoding="UTF-8" />
+  </Target>
+
   <ItemGroup>
     <ProjectReference Include="..\Application2\Application2.csproj" />
     <ProjectReference Include="..\Infrastructure\Infrastructure.csproj" />

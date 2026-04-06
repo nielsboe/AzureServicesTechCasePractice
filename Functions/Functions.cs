@@ -11,7 +11,7 @@ using Application2.Shipments;
 using Workers.DTOs.Products;
 using Workers.DTOs.Shipments;
 
-namespace Functions;
+namespace Workers;
 
 public class Functions(ILogger<Functions> logger, IProductHandler productHandler, IOrderHandler orderHandler, IShipmentHandler shipmentHandler)
 {
