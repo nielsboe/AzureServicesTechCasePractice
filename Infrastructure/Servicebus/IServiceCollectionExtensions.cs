@@ -15,7 +15,7 @@ public static class IServiceCollectionExtensions
 {
     public static IServiceCollection RegisterServiceBus(this IServiceCollection services, IConfiguration configuration)
     {
-        services.Configure<ServicebusOptions>(configuration.GetSection(ServicebusOptions.SectionName));
+        services.Configure<ServicebusOptions>(opts => configuration.GetSection(ServicebusOptions.SectionName).Bind(opts));
         services.AddScoped<IServiceBusSenderClient, AzureServiceBusClient>();
 
         return services;

@@ -10,7 +10,7 @@ public static class IServiceCollectionExtensions
 {
     public static IServiceCollection RegisterDatabaseRepositories(this IServiceCollection services, IConfiguration configuration)
     {
-        services.Configure<DatabaseOptions>(configuration.GetSection(DatabaseOptions.SectionName));
+        services.Configure<DatabaseOptions>(opts => configuration.GetSection(DatabaseOptions.SectionName).Bind(opts));
         var config = configuration.GetRequiredSection(DatabaseOptions.SectionName).Get<DatabaseOptions>();
 
         services.AddDbContext<DataContext>(options =>

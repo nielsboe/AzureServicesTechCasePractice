@@ -1,4 +1,5 @@
-﻿using Domain2.Interfaces;
+﻿using Application2.Products;
+using Domain2.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using Presentation.DTO;
 
@@ -13,13 +14,6 @@ namespace Presentation.Controllers
         public OrderController(IServiceBusSenderClient senderClient)
         {
             _senderClient = senderClient;
-        }
-
-        [HttpGet("GetOrder")]
-        public async Task<IActionResult> GetOrder(OrderDTO orderDTO)
-        {
-            await _senderClient.Send(orderDTO, "get-order");
-            return Ok();
         }
 
         [HttpPost("CreateOrder")]
