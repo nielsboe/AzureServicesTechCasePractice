@@ -1,12 +1,18 @@
-using System.Text.Json;
 using Azure.Messaging.ServiceBus;
 using Domain2.Interfaces;
+using Microsoft.Extensions.Options;
+using System.Text.Json;
 
 namespace Infrastructure.Servicebus;
 
-public class AzureServiceBusClient(ServiceBusClient client) : IServiceBusSenderClient
+public class AzureServiceBusClient : IServiceBusSenderClient
 {
-    private readonly ServiceBusClient _client = client;
+    private readonly ServiceBusClient _client;
+    
+    public AzureServiceBusClient(IOptions<ServicebusOptions> options)
+    {
+        _client = new ServiceBusClient(options.Value.ConnectionString);
+    }
 
     public async Task Send<T>(T topic, string task)
     {

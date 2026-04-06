@@ -1,19 +1,17 @@
-using Domain2;
+﻿using Domain2;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace Infrastructure.Databases;
 
-public class Seed
+public static class IServiceScopeExtensions
 {
-    private readonly DataContext _dataContext;
-    public Seed(DataContext context)
+    public static IServiceScope SetupDatabase(this IServiceScope scope, bool addMockData)
     {
-        _dataContext = context;
-    }
+        var dbContext = scope.ServiceProvider.GetRequiredService<DataContext>();
+        dbContext.Database.Migrate();
 
-    public void SeedDataContext()
-    {
-        if (!_dataContext.Products.Any())
+        if (!dbContext.Products.Any())
         {
             var products = new List<Product>
             {
@@ -24,13 +22,13 @@ public class Seed
                 new Product { Name = "Step", Description = "Een step", Price = 20 }
             };
 
-            _dataContext.Products.AddRange(products);
-            _dataContext.SaveChanges();
+            dbContext.Products.AddRange(products);
+            dbContext.SaveChanges();
         }
 
-        var dbProducts = _dataContext.Products.ToList();
+        var dbProducts = dbContext.Products.ToList();
 
-        if (!_dataContext.Orders.Any())
+        if (!dbContext.Orders.Any())
         {
             var orders = new List<Order>
             {
@@ -68,13 +66,13 @@ public class Seed
                 }
             };
 
-            _dataContext.Orders.AddRange(orders);
-            _dataContext.SaveChanges();
+            dbContext.Orders.AddRange(orders);
+            dbContext.SaveChanges();
         }
 
-        if (!_dataContext.Shipments.Any())
+        if (!dbContext.Shipments.Any())
         {
-            var orders = _dataContext.Orders.Include(o => o.Products).ToList();
+            var orders = dbContext.Orders.Include(o => o.Products).ToList();
 
             var shipments = new List<Shipment>
             {
@@ -101,8 +99,11 @@ public class Seed
                 }
             };
 
-            _dataContext.Shipments.AddRange(shipments);
-            _dataContext.SaveChanges();
+            dbContext.Shipments.AddRange(shipments);
+            dbContext.SaveChanges();
         }
+
+        return scope;
     }
+
 }
