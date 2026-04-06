@@ -17,5 +17,9 @@
   <ItemGroup>
     <ProjectReference Include="..\Presentation\WebApi.csproj" />
   </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="AzureSBReceivers\" />
+  </ItemGroup>
   
 </Project>
