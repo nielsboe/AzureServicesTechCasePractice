@@ -7,15 +7,18 @@ using Microsoft.Extensions.Logging;
 using System.Text.Json;
 using Workers.DTOs.Orders;
 using Application2.Orders;
+using Application2.Shipments;
 using Workers.DTOs.Products;
+using Workers.DTOs.Shipments;
 
 namespace Functions;
 
-public class Functions(ILogger<Functions> logger, IProductHandler productHandler, IOrderHandler orderHandler)
+public class Functions(ILogger<Functions> logger, IProductHandler productHandler, IOrderHandler orderHandler, IShipmentHandler shipmentHandler)
 {
     private readonly ILogger<Functions> _logger = logger;
     private readonly IProductHandler _productHandler = productHandler;
     private readonly IOrderHandler _orderHandler = orderHandler;
+    private readonly IShipmentHandler _shipmentHandler = shipmentHandler;
 
     #region Products
 
@@ -142,6 +145,51 @@ public class Functions(ILogger<Functions> logger, IProductHandler productHandler
         await messageActions.CompleteMessageAsync(message, cancellationToken);
     }
 
+
+    #endregion
+
+    #region Shipments
+    // Listener function for creating the shipment
+    [FunctionName("CreateShipment")]
+    public async Task CreateShipment(
+        [ServiceBusTrigger("create-shipment", Connection = "ServiceBusEndpoint")]
+        ServiceBusReceivedMessage message,
+        ServiceBusMessageActions messageActions,
+        CancellationToken cancellationToken)
+    {
+        string messageBody = message.Body.ToString();
+        var dto = JsonSerializer.Deserialize<CreateShipmentDto>(messageBody);
+        await _shipmentHandler.Create(CreateShipmentDto.Map(dto), cancellationToken);
+        await messageActions.CompleteMessageAsync(message, cancellationToken);
+    }
+
+    // Listener function for updating the shipment
+    [FunctionName("UpdateShipment")]
+    public async Task UpdateShipment(
+        [ServiceBusTrigger("update-shipment", Connection = "ServiceBusEndpoint")]
+        ServiceBusReceivedMessage message,
+        ServiceBusMessageActions messageActions,
+        CancellationToken cancellationToken)
+    {
+        string messageBody = message.Body.ToString();
+        var dto = JsonSerializer.Deserialize<UpdateShipmentDto>(messageBody);
+        await _shipmentHandler.Update(UpdateShipmentDto.Map(dto));
+        await messageActions.CompleteMessageAsync(message, cancellationToken);
+    }
+
+    // Listener function for deleting the shipment
+    [FunctionName("DeleteShipment")]
+    public async Task DeleteShipment(
+        [ServiceBusTrigger("delete-shipment", Connection = "ServiceBusEndpoint")]
+        ServiceBusReceivedMessage message,
+        ServiceBusMessageActions messageActions,
+        CancellationToken cancellationToken)
+    {
+        string messageBody = message.Body.ToString();
+        var dto = JsonSerializer.Deserialize<DeleteShipmentDto>(messageBody);
+        await _shipmentHandler.Delete(dto.ShipmentId);
+        await messageActions.CompleteMessageAsync(message, cancellationToken);
+    }
 
     #endregion
 
