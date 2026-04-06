@@ -1,6 +1,8 @@
-﻿using Azure.Messaging.ServiceBus;
-using Domain.Interfaces;
 using System.Text.Json;
+using Azure.Messaging.ServiceBus;
+using Domain.Interfaces;
+
+namespace Infrastructure.Servicebus;
 
 public class AzureServiceBusClient(ServiceBusClient client) : IServiceBusSenderClient
 {

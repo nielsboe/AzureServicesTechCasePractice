@@ -1,7 +1,6 @@
 using Domain;
-using Application.Data;
 
-namespace Application.Repositories;
+namespace Infrastructure.Databases.Repositories;
 
 public class ShipmentRepository(DataContext context) : IShipmentRepository
 {

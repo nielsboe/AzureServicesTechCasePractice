@@ -1,8 +1,7 @@
 using Domain;
 using MapsterMapper;
-using Application.Data;
 
-namespace Application.Repositories;
+namespace Infrastructure.Databases.Repositories;
 
 public class OrderRepository(DataContext context, IMapper mapsterMapper) : IOrderRepository
 {

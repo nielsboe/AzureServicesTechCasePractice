@@ -1,8 +1,7 @@
 using Domain;
 using Microsoft.EntityFrameworkCore;
-using Application.Data;
 
-namespace Application;
+namespace Infrastructure.Databases;
 
 public class Seed
 {
