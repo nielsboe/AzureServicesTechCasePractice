@@ -1,33 +1,46 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Domain2.Interfaces;
+using Microsoft.AspNetCore.Mvc;
 using Presentation.DTO;
 
 namespace Presentation.Controllers
 {
+    [Route("api/[controller]")]
+    [ApiController]
     public class ShippingController : Controller
     {
+        private readonly IServiceBusSenderClient _senderClient;
+
+        public ShippingController(IServiceBusSenderClient senderClient)
+        {
+            _senderClient = senderClient;
+        }
 
         [HttpGet("GetShipment")]
-        public async Task GetShipment(ShipmentDTO shipmentDTO)
+        public async Task<IActionResult> GetShipment(ShipmentDTO shipmentDTO)
         {
-            await Post(shipmentDTO, "get-order");
+            await _senderClient.Send(shipmentDTO, "get-shipment");
+            return Ok();
         }
 
         [HttpPost("CreateShipment")]
-        public async Task CreateShipment(ShipmentDTO shipmentDTO)
+        public async Task<IActionResult> CreateShipment(ShipmentDTO shipmentDTO)
         {
-            await Post(shipmentDTO, "create-order");
+            await _senderClient.Send(shipmentDTO, "create-shipment");
+            return Ok();
         }
 
         [HttpPost("UpdateShipment")]
-        public async Task UpdateShipment(ShipmentDTO shipmentDTO)
+        public async Task<IActionResult> UpdateShipment(ShipmentDTO shipmentDTO)
         {
-            await Post(shipmentDTO, "update-order");
+            await _senderClient.Send(shipmentDTO, "update-shipment");
+            return Ok();
         }
 
         [HttpPost("DeleteShipment")]
-        public async Task DeleteShipment(ShipmentDTO shipmentDTO)
+        public async Task<IActionResult> DeleteShipment(ShipmentDTO shipmentDTO)
         {
-            await Post(shipmentDTO, "delete-order");
+            await _senderClient.Send(shipmentDTO, "delete-shipment");
+            return Ok();
         }
     }
 }

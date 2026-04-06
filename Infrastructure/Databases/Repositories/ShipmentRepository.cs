@@ -1,4 +1,5 @@
-using Domain;
+using Domain2;
+using Domain2.Interfaces;
 
 namespace Infrastructure.Databases.Repositories;
 

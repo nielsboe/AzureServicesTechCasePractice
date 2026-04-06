@@ -1,4 +1,4 @@
-﻿using Domain.Interfaces;
+﻿using Domain2.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using Presentation.DTO;
 
@@ -8,28 +8,39 @@ namespace Presentation.Controllers
     [ApiController]
     public class InventoryController : Controller
     {
-        [HttpGet("GetProduct")]
-        public async Task GetProduct(ProductDTO productDTO)
+        private readonly IServiceBusSenderClient _senderClient;
+
+        public InventoryController(IServiceBusSenderClient senderClient)
         {
-            await Post(productDTO, "get-product");
+            _senderClient = senderClient;
+        }
+
+        [HttpGet("GetProduct")]
+        public async Task<IActionResult> GetProduct(ProductDTO productDTO)
+        {
+            await _senderClient.Send(productDTO, "get-product");
+            return Ok();
         }
 
         [HttpPut("CreateProduct")]
-        public async Task CreateProduct(ProductDTO productDTO)
+        public async Task<IActionResult> CreateProduct(ProductDTO productDTO)
         {
-            await Post(productDTO, "create-product");
+            await _senderClient.Send(productDTO, "create-product");
+            return Ok();
         }
 
         [HttpPost("UpdateProduct")]
-        public async Task UpdateProduct(ProductDTO productDTO)
+        public async Task<IActionResult> UpdateProduct(ProductDTO productDTO)
         {
-            await Post(productDTO, "update-product");
+            await _senderClient.Send(productDTO, "update-product");
+            return Ok();
         }
 
         [HttpDelete("DeleteProduct")]
-        public async Task DeleteProduct(ProductDTO productDTO)
+        public async Task<IActionResult> DeleteProduct(ProductDTO productDTO)
         {
-            await Post(productDTO, "delete-product");
+            await _senderClient.Send(productDTO, "delete-product");
+            return Ok();
         }
     }
 }

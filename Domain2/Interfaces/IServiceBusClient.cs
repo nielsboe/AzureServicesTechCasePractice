@@ -2,5 +2,5 @@
 
 public interface IServiceBusSenderClient
 {
-    Task Post<T>(T topic, string task);
+    Task Send<T>(T topic, string task);
 }

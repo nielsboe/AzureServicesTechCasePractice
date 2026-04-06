@@ -1,4 +1,4 @@
-using Domain;
+using Domain2;
 using Microsoft.EntityFrameworkCore;
 
 namespace Infrastructure.Databases;

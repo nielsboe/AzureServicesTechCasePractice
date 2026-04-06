@@ -1,6 +1,6 @@
 using System.Text.Json;
 using Azure.Messaging.ServiceBus;
-using Domain.Interfaces;
+using Domain2.Interfaces;
 
 namespace Infrastructure.Servicebus;
 
@@ -8,7 +8,7 @@ public class AzureServiceBusClient(ServiceBusClient client) : IServiceBusSenderC
 {
     private readonly ServiceBusClient _client = client;
 
-    public async Task Post<T>(T topic, string task)
+    public async Task Send<T>(T topic, string task)
     {
         var sender = _client.CreateSender(task);
         var body = JsonSerializer.Serialize(topic);
