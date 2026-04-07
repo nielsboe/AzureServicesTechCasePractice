@@ -1,5 +1,5 @@
-﻿using Domain.Interfaces;
-using MapsterMapper;
+﻿using Application2.Products;
+using Domain2.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using Presentation.DTO;
 
@@ -9,28 +9,32 @@ namespace Presentation.Controllers
     [ApiController]
     public class OrderController : Controller
     {
-        [HttpGet("GetOrder")]
-        public async Task GetOrder(OrderDTO orderDTO)
+        private readonly IServiceBusSenderClient _senderClient;
+
+        public OrderController(IServiceBusSenderClient senderClient)
         {
-            await Post(orderDTO, "get-order");
+            _senderClient = senderClient;
         }
 
         [HttpPost("CreateOrder")]
-        public async Task CreateOrder(OrderDTO orderDTO)
+        public async Task<IActionResult> CreateOrder(OrderDTO orderDTO)
         {
-            await Post(orderDTO, "create-order");
+            await _senderClient.Send(orderDTO, "create-order");
+            return Ok();
         }
 
         [HttpPost("UpdateOrder")]
-        public async Task UpdateOrder(OrderDTO orderDTO)
+        public async Task<IActionResult> UpdateOrder(OrderDTO orderDTO)
         {
-            await Post(orderDTO, "update-order");
+            await _senderClient.Send(orderDTO, "update-order");
+            return Ok();
         }
 
         [HttpPost("DeleteOrder")]
-        public async Task DeleteOrder(OrderDTO orderDTO)
+        public async Task<IActionResult> DeleteOrder(OrderDTO orderDTO)
         {
-            await Post(orderDTO, "delete-order");
+            await _senderClient.Send(orderDTO, "delete-order");
+            return Ok();
         }
     }
 }

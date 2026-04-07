@@ -1,6 +1,5 @@
 ﻿using Azure.Messaging.ServiceBus;
 using Domain.Interfaces;
-using Microsoft.AspNetCore.Mvc;
 using System.Text.Json;
 
 public class AzureServiceBusClient(ServiceBusClient client) : IServiceBusSenderClient
