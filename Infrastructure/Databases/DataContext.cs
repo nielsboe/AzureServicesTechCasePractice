@@ -1,5 +1,5 @@
 using Microsoft.EntityFrameworkCore;
-using Domain2;
+using Domain;
 
 namespace Infrastructure.Databases;
 

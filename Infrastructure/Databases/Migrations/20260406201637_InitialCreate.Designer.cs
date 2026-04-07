@@ -25,7 +25,7 @@ namespace Infrastructure.Databases.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.Entity("Domain2.Order", b =>
+            modelBuilder.Entity("Domain.Order", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -54,7 +54,7 @@ namespace Infrastructure.Databases.Migrations
                     b.ToTable("Orders");
                 });
 
-            modelBuilder.Entity("Domain2.Product", b =>
+            modelBuilder.Entity("Domain.Product", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -88,7 +88,7 @@ namespace Infrastructure.Databases.Migrations
                     b.ToTable("Products");
                 });
 
-            modelBuilder.Entity("Domain2.Shipment", b =>
+            modelBuilder.Entity("Domain.Shipment", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -114,23 +114,23 @@ namespace Infrastructure.Databases.Migrations
                     b.ToTable("Shipments");
                 });
 
-            modelBuilder.Entity("Domain2.Product", b =>
+            modelBuilder.Entity("Domain.Product", b =>
                 {
-                    b.HasOne("Domain2.Order", null)
+                    b.HasOne("Domain.Order", null)
                         .WithMany("Products")
                         .HasForeignKey("OrderId");
 
-                    b.HasOne("Domain2.Shipment", null)
+                    b.HasOne("Domain.Shipment", null)
                         .WithMany("Products")
                         .HasForeignKey("ShipmentId");
                 });
 
-            modelBuilder.Entity("Domain2.Order", b =>
+            modelBuilder.Entity("Domain.Order", b =>
                 {
                     b.Navigation("Products");
                 });
 
-            modelBuilder.Entity("Domain2.Shipment", b =>
+            modelBuilder.Entity("Domain.Shipment", b =>
                 {
                     b.Navigation("Products");
                 });

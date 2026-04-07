@@ -1,15 +1,14 @@
-using Application2.Products;
 using Azure.Messaging.ServiceBus;
-using Domain2;
 using Microsoft.Azure.WebJobs;
 using Microsoft.Azure.WebJobs.ServiceBus;
 using Microsoft.Extensions.Logging;
 using System.Text.Json;
 using Workers.DTOs.Orders;
-using Application2.Orders;
-using Application2.Shipments;
 using Workers.DTOs.Products;
 using Workers.DTOs.Shipments;
+using Application.Shipments;
+using Application.Products;
+using Application.Orders;
 
 namespace Workers;
 

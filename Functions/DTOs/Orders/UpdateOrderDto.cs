@@ -1,4 +1,4 @@
-using Domain2;
+using Domain;
 
 namespace Workers.DTOs.Orders;
 

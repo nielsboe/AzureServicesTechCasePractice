@@ -5,15 +5,14 @@ using Domain.Interfaces;
 using Infrastructure.Databases;
 using Infrastructure.Databases.Repositories;
 using Infrastructure.Servicebus;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
 
-namespace Workers;
+namespace Presentation;
 
 public static class IServiceCollectionExtensions
 {
     public static void RegisterInfrastructure(this IServiceCollection services, IConfiguration configuration)
     {
+        services.RegisterDatabaseRepositories(configuration);
         services.RegisterServiceBus(configuration);
     }
 

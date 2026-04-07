@@ -1,5 +1,5 @@
-using Domain2;
-using Domain2.Interfaces;
+using Domain;
+using Domain.Interfaces;
 
 namespace Infrastructure.Databases.Repositories;
 

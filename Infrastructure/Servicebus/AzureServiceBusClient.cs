@@ -1,5 +1,5 @@
 using Azure.Messaging.ServiceBus;
-using Domain2.Interfaces;
+using Domain.Interfaces;
 using Microsoft.Extensions.Options;
 using System.Text.Json;
 

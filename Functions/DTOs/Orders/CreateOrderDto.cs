@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using Domain2;
+using Domain;
 
 namespace Workers.DTOs.Orders;
 
