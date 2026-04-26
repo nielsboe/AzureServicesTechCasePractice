@@ -6,9 +6,7 @@ using System.Text.Json;
 using Workers.DTOs.Orders;
 using Workers.DTOs.Products;
 using Workers.DTOs.Shipments;
-using Application.Shipments;
-using Application.Products;
-using Application.Orders;
+using Application.Interfaces;
 
 namespace Workers;
 

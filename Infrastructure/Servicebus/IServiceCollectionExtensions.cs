@@ -1,13 +1,6 @@
-﻿using Domain.Interfaces;
-using Infrastructure.Databases;
-using Infrastructure.Databases.Repositories;
+﻿using Application.Interfaces;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Infrastructure.Servicebus;
 

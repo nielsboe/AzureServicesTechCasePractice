@@ -1,5 +1,5 @@
+using Application.Interfaces;
 using Domain;
-using Domain.Interfaces;
 using Microsoft.EntityFrameworkCore;
 
 namespace Infrastructure.Databases.Repositories;
@@ -25,21 +25,21 @@ public class ProductRepository(DataContext context) : IProductRepository
     public async Task<int> Create(Product product, CancellationToken cancellationToken)
     {
         await _context.Products.AddAsync(product, cancellationToken);
-        _context.SaveChanges();
+        await _context.SaveChangesAsync(cancellationToken);
 
         return product.Id;
     }
 
-    public async Task Update(Product product)
+    public async Task Update(Product product, CancellationToken cancellationToken)
     {
         _context.Products.Update(product);
-        _context.SaveChanges();
+        await _context.SaveChangesAsync(cancellationToken);
     }
 
-    public async Task Delete(string name)
+    public async Task Delete(int id, CancellationToken cancellationToken)
     {
-        var product = _context.Products.Single(p => p.Name == name);
+        var product = _context.Products.Single(p => p.Id == id);
         _context.Products.Remove(product);
-        _context.SaveChanges();
+        await _context.SaveChangesAsync(cancellationToken);
     }
 }

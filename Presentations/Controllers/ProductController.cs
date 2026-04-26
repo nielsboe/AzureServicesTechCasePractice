@@ -1,5 +1,4 @@
-﻿using Application.Products;
-using Domain.Interfaces;
+﻿using Application.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using Presentation.DTOs;
 

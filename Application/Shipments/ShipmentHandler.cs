@@ -1,5 +1,6 @@
+using Application.Interfaces;
 using Domain;
-using Domain.Interfaces;
+using Application.Shipments.Commands;
 
 namespace Application.Shipments;
 
@@ -7,34 +8,30 @@ public class ShipmentHandler(IShipmentRepository shipmentRepository) : IShipment
 {
     private readonly IShipmentRepository _shipmentRepository = shipmentRepository;
 
-    public async Task<int> Create(Shipment shipment, CancellationToken cancellationToken)
+    public async Task<int> Create(CreateShipmentCommand createShipmentCommand)
     {
-        // Basic validation
-        if (shipment.ShipmentDate <= DateTime.UtcNow)
+        if (createShipmentCommand.shipment.ShipmentDate <= DateTime.UtcNow)
         {
             throw new ArgumentException("Shipment date must be in the future.");
         }
 
-        // Repository returns bool for create in this project; adapt by returning 0/Id
-        var created = _shipmentRepository.CreateShipment(shipment);
-        return await Task.FromResult(created ? shipment.Id : 0);
+        await _shipmentRepository.Create(createShipmentCommand.shipment, createShipmentCommand.cancellationToken);
+        return createShipmentCommand.shipment.Id;
     }
 
-    public async Task Update(Shipment shipment)
+    public async Task Update(UpdateShipmentCommand updateShipmentCommand)
     {
-        if (shipment.ShipmentDate <= DateTime.UtcNow)
+        if (updateShipmentCommand.shipment.ShipmentDate <= DateTime.UtcNow)
         {
             throw new ArgumentException("Shipment date must be in the future.");
         }
 
-        _shipmentRepository.UpdateShipment(shipment);
-        await Task.CompletedTask;
+        await _shipmentRepository.Update(updateShipmentCommand.shipment, updateShipmentCommand.cancellationToken);
     }
 
-    public async Task Delete(int shipmentId)
+    public async Task Delete(DeleteShipmentCommand deleteShipmentCommand)
     {
-        var shipment = _shipmentRepository.GetShipment(shipmentId);
-        _shipmentRepository.DeleteShipment(shipment);
-        await Task.CompletedTask;
+        var shipment = _shipmentRepository.Get(deleteShipmentCommand.shipmentId);
+        await _shipmentRepository.Delete(shipment, deleteShipmentCommand.cancellationToken);
     }
 }

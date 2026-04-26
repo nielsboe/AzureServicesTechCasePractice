@@ -1,9 +1,7 @@
-﻿using Application.Orders;
+﻿using Application.Interfaces;
+using Application.Orders;
 using Application.Products;
 using Application.Shipments;
-using Domain.Interfaces;
-using Infrastructure.Databases;
-using Infrastructure.Databases.Repositories;
 using Infrastructure.Servicebus;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;

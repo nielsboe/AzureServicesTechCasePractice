@@ -1,12 +1,12 @@
 ﻿using Domain;
 
-namespace Domain.Interfaces;
+namespace Application.Interfaces;
 
 public interface IProductRepository
 {
     Task<int> Create(Product product, CancellationToken cancellationToken);
-    Task Delete(string name);
+    Task Delete(int productId, CancellationToken cancellationToken);
     Task<Product> Get(int id);
     Task<ICollection<Product>>  All();
-    Task Update(Product product);
+    Task Update(Product product, CancellationToken cancellationToken);
 }

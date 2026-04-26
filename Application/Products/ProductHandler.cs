@@ -1,5 +1,6 @@
 ﻿using Domain;
-using Domain.Interfaces;
+using Application.Interfaces;
+using Application.Products.Commands;
 
 namespace Application.Products;
 
@@ -7,36 +8,30 @@ public class ProductHandler(IProductRepository inventoryRepository) : IProductHa
 {
     private readonly IProductRepository _productRepository = inventoryRepository;
 
-    public async Task<ICollection<Product>> GetAll(CancellationToken cancellationToken)
-    {
-        var products = await _productRepository.All();
-        return products;
-    }
-
-    public async Task<int> Create(Product product, CancellationToken cancellationToken)
+    public async Task<int> Create(CreateProductCommand createProductCommand)
     {
         // Validate
-        if (product.Name.Length <= 5)
+        if (createProductCommand.product.Name.Length <= 5)
         {
             throw new ArgumentException("Product name should be at least 5 characters");
         }
 
-        return await _productRepository.Create(product, cancellationToken);
+        return await _productRepository.Create(createProductCommand.product, createProductCommand.cancellationToken);
     }
 
-    public async Task Update(Product product)
+    public async Task Update(UpdateProductCommand updateProductCommand)
     {
         // Validate
-        if (product.Name.Length <= 5)
+        if (updateProductCommand.product.Name.Length <= 5)
         {
             throw new ArgumentException("Product name should be at least 5 characters");
         }
 
-        await _productRepository.Update(product);
+        await _productRepository.Update(updateProductCommand.product, updateProductCommand.cancellationToken);
     }
 
-    public async Task Delete(string name)
+    public async Task Delete(DeleteProductCommand deleteProductCommand)
     {
-        await _productRepository.Delete(name);
+        await _productRepository.Delete(deleteProductCommand.productId, deleteProductCommand.cancellationToken);
     }
 } 

@@ -1,5 +1,6 @@
-﻿using Domain;
-using Domain.Interfaces;
+﻿using Application.Interfaces;
+using Domain;
+using Application.Orders.Commands;
 
 namespace Application.Orders;
 
@@ -7,30 +8,18 @@ public class OrderHandler(IOrderRepository orderRepository) : IOrderHandler
 {
     private readonly IOrderRepository _orderRepository = orderRepository;
 
-    public async Task<int> Create(Order order, CancellationToken cancellationToken)
+    public async Task<int> Create(CreateOrderCommand createOrderCommand)
     {
-        // Validate
-        if (order.OrderDate <= DateTime.UtcNow)
-        {
-            throw new ArgumentException("Order should be placed before now.");
-        }
-
-        return await _orderRepository.Create(order, cancellationToken);
+        return await _orderRepository.Create(createOrderCommand.order, createOrderCommand.cancellationToken);
     }
 
-    public async Task Update(Order order)
+    public async Task Update(UpdateOrderCommand updateOrderCommand)
     {
-        // Validate
-        if (order.OrderDate <= DateTime.UtcNow)
-        {
-            throw new ArgumentException("Order should be placed before now.");
-        }
-
-        _orderRepository.Update(order);
+        await _orderRepository.Update(updateOrderCommand.order, updateOrderCommand.cancellationToken);
     }
 
-    public async Task Delete(string name)
+    public async Task Delete(DeleteOrderCommand deleteOrderCommand)
     {
-        await _orderRepository.Delete(name);
+        await _orderRepository.Delete(deleteOrderCommand.customerName, deleteOrderCommand.cancellationToken);
     }
 }

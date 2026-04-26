@@ -1,6 +1,6 @@
 
+using Application.Interfaces;
 using Domain;
-using Domain.Interfaces;
 using Microsoft.EntityFrameworkCore;
 
 namespace Infrastructure.Databases.Repositories;
@@ -31,16 +31,16 @@ public class OrderRepository(DataContext context) : IOrderRepository
         return order.Id;
     }
 
-    public async Task Update(Order order)
+    public async Task Update(Order order, CancellationToken cancellationToken)
     {
         _context.Orders.Update(order);
-        _context.SaveChanges();
+        await _context.SaveChangesAsync(cancellationToken);
     }
 
-    public async Task Delete(string customerName)
+    public async Task Delete(string customerName, CancellationToken cancellationToken)
     {
         var order = _context.Orders.Single(p => p.CustomerName == customerName);
         _context.Orders.Remove(order);
-        _context.SaveChanges();
+        await _context.SaveChangesAsync(cancellationToken);
     }
 }

@@ -1,5 +1,5 @@
+using Application.Interfaces;
 using Domain;
-using Domain.Interfaces;
 
 namespace Infrastructure.Databases.Repositories;
 
@@ -7,42 +7,33 @@ public class ShipmentRepository(DataContext context) : IShipmentRepository
 {
     private readonly DataContext _context = context;
 
-    public bool ShipmentExists(int id)
-    {
-        return _context.Shipments.Any(p => p.Id == id);
-    }
-
-    public ICollection<Shipment> GetShipments()
+    public ICollection<Shipment> All()
     {
         return _context.Shipments.OrderBy(p => p.Id).ToList();
     }
 
-    public Shipment GetShipment(int id)
+    public Shipment Get(int id)
     {
         return _context.Shipments.FirstOrDefault(p => p.Id == id) ?? throw new Exception("Shipment not found");
     }
 
-    public bool CreateShipment(Shipment shipment)
+    public async Task<int> Create(Shipment shipment, CancellationToken cancellationToken)
     {
-        _context.Shipments.Add(shipment);
-        return Save();
+        await _context.Shipments.AddAsync(shipment, cancellationToken);
+        _context.SaveChanges();
+
+        return shipment.Id;
     }
 
-    public bool UpdateShipment(Shipment shipment)
+    public async Task Update(Shipment shipment, CancellationToken cancellationToken)
     {
         _context.Shipments.Update(shipment);
-        return Save();
+         await _context.SaveChangesAsync(cancellationToken);
     }
 
-    public bool DeleteShipment(Shipment shipment)
+    public async Task Delete(Shipment shipment, CancellationToken cancellationToken)
     {
         _context.Shipments.Remove(shipment);
-        return Save();
-    }
-
-    public bool Save()
-    {
-        var saved = _context.SaveChanges();
-        return saved > 0;
+        await _context.SaveChangesAsync(cancellationToken);
     }
 }
