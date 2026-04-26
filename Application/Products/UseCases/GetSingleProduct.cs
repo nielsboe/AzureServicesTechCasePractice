@@ -13,7 +13,7 @@ public class GetSingleProduct
         _productRepository = productRepository;
     }
 
-    public async Task<Product> GetSingleProductById(int productId, CancellationToken cancellationToken)
+    public async Task<Product> GetSingleProductById(int productId)
     {
         var product = await _productRepository.Get(productId);
 

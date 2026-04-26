@@ -7,6 +7,9 @@ using Workers.DTOs.Orders;
 using Workers.DTOs.Products;
 using Workers.DTOs.Shipments;
 using Application.Interfaces;
+using Application.Products.Commands;
+using Application.Orders.Commands;
+using Application.Shipments.Commands;
 
 namespace Workers;
 
@@ -33,7 +36,7 @@ public class Functions(ILogger<Functions> logger, IProductHandler productHandler
         // Deserialize the message body into a Product object
         var productDto = JsonSerializer.Deserialize<CreateProductDto>(messageBody);
 
-        await _productHandler.Create(CreateProductDto.Map(productDto), cancellationToken); 
+        await _productHandler.Create(new CreateProductCommand(CreateProductDto.Map(productDto), cancellationToken)); 
 
         // Complete the message
         await messageActions.CompleteMessageAsync(message, cancellationToken);
@@ -53,7 +56,7 @@ public class Functions(ILogger<Functions> logger, IProductHandler productHandler
         // Deserialize the message body into a Product object
         var productDto = JsonSerializer.Deserialize<UpdateProductDto>(messageBody);
 
-        await _productHandler.Update(UpdateProductDto.Map(productDto));
+        await _productHandler.Update(new UpdateProductCommand(UpdateProductDto.Map(productDto), cancellationToken));
 
         // Complete the message
         await messageActions.CompleteMessageAsync(message, cancellationToken);
@@ -73,7 +76,7 @@ public class Functions(ILogger<Functions> logger, IProductHandler productHandler
         // Deserialize the message body into a Product object
         var productDto = JsonSerializer.Deserialize<DeleteProductDto>(messageBody);
 
-        await _productHandler.Delete(productDto.Name);
+        await _productHandler.Delete(new DeleteProductCommand(productDto.Name, cancellationToken));
 
         // Complete the message
         await messageActions.CompleteMessageAsync(message, cancellationToken);
@@ -96,7 +99,7 @@ public class Functions(ILogger<Functions> logger, IProductHandler productHandler
         // Deserialize the message body into an order DTO
         var orderDto = JsonSerializer.Deserialize<CreateOrderDto>(messageBody);
 
-        await _orderHandler.Create(CreateOrderDto.Map(orderDto), cancellationToken);
+        await _orderHandler.Create(new CreateOrderCommand(CreateOrderDto.Map(orderDto), cancellationToken));
 
         // Complete the message
         await messageActions.CompleteMessageAsync(message, cancellationToken);
@@ -116,7 +119,7 @@ public class Functions(ILogger<Functions> logger, IProductHandler productHandler
         // Deserialize the message body into an order DTO
         var orderDto = JsonSerializer.Deserialize<UpdateOrderDto>(messageBody);
 
-        await _orderHandler.Update(UpdateOrderDto.Map(orderDto));
+        await _orderHandler.Update(new UpdateOrderCommand(UpdateOrderDto.Map(orderDto), cancellationToken));
 
         // Complete the message
         await messageActions.CompleteMessageAsync(message, cancellationToken);
@@ -136,7 +139,7 @@ public class Functions(ILogger<Functions> logger, IProductHandler productHandler
         // Deserialize the message body into a delete DTO
         var orderDto = JsonSerializer.Deserialize<DeleteOrderDto>(messageBody);
 
-        await _orderHandler.Delete(orderDto.CustomerName);
+        await _orderHandler.Delete(new DeleteOrderCommand(orderDto.CustomerName, cancellationToken));
 
         // Complete the message
         await messageActions.CompleteMessageAsync(message, cancellationToken);
@@ -156,7 +159,7 @@ public class Functions(ILogger<Functions> logger, IProductHandler productHandler
     {
         string messageBody = message.Body.ToString();
         var dto = JsonSerializer.Deserialize<CreateShipmentDto>(messageBody);
-        await _shipmentHandler.Create(CreateShipmentDto.Map(dto), cancellationToken);
+        await _shipmentHandler.Create(new CreateShipmentCommand(CreateShipmentDto.Map(dto), cancellationToken));
         await messageActions.CompleteMessageAsync(message, cancellationToken);
     }
 
@@ -170,7 +173,7 @@ public class Functions(ILogger<Functions> logger, IProductHandler productHandler
     {
         string messageBody = message.Body.ToString();
         var dto = JsonSerializer.Deserialize<UpdateShipmentDto>(messageBody);
-        await _shipmentHandler.Update(UpdateShipmentDto.Map(dto));
+        await _shipmentHandler.Update(new UpdateShipmentCommand(UpdateShipmentDto.Map(dto), cancellationToken));
         await messageActions.CompleteMessageAsync(message, cancellationToken);
     }
 
@@ -184,7 +187,7 @@ public class Functions(ILogger<Functions> logger, IProductHandler productHandler
     {
         string messageBody = message.Body.ToString();
         var dto = JsonSerializer.Deserialize<DeleteShipmentDto>(messageBody);
-        await _shipmentHandler.Delete(dto.ShipmentId);
+        await _shipmentHandler.Delete(new DeleteShipmentCommand(dto.ShipmentId, cancellationToken));
         await messageActions.CompleteMessageAsync(message, cancellationToken);
     }
 

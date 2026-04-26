@@ -1,5 +1,4 @@
 using Application.Interfaces;
-using Domain;
 using Application.Shipments.Commands;
 
 namespace Application.Shipments;

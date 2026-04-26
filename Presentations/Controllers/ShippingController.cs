@@ -6,20 +6,22 @@ namespace Presentation.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class ShippingController : Controller
+    public class ShippingController(IServiceBusSenderClient senderClient, IGetAllShipments getAllShipments) : Controller
     {
-        private readonly IServiceBusSenderClient _senderClient;
-
-        public ShippingController(IServiceBusSenderClient senderClient)
-        {
-            _senderClient = senderClient;
-        }
+        IServiceBusSenderClient _senderClient = senderClient;
+        IGetAllShipments _getAllShipments = getAllShipments;
 
         [HttpGet("GetShipment")]
-        public async Task<IActionResult> GetShipment(ShipmentDTO shipmentDTO)
+        public async Task<IActionResult> GetSingleShipment(ShipmentDTO shipmentDTO)
         {
             await _senderClient.Send(shipmentDTO, "get-shipment");
             return Ok();
+        }
+
+        [HttpGet("GetAllhipments")]
+        public async Task<IActionResult> GetAllShipments()
+        {
+            return Ok(_getAllShipments.All());
         }
 
         [HttpPost("CreateShipment")]

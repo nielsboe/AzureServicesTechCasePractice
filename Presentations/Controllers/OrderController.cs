@@ -7,13 +7,15 @@ namespace Presentation.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class OrderController : Controller
+    public class OrderController(IServiceBusSenderClient senderClient, IGetAllOrders getAllOrders) : Controller
     {
-        private readonly IServiceBusSenderClient _senderClient;
+        IServiceBusSenderClient _senderClient =  senderClient;
+        IGetAllOrders _getAllOrders = getAllOrders;
 
-        public OrderController(IServiceBusSenderClient senderClient)
+        [HttpGet("GetAllOrders")]
+        public async Task<IActionResult> GetAllOrders()
         {
-            _senderClient = senderClient;
+            return Ok(await _getAllOrders.All());
         }
 
         [HttpPost("CreateOrder")]

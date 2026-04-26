@@ -14,7 +14,7 @@ namespace Application.Orders.UseCases
 
         public async Task<ICollection<Order>> GetAllOrders(CancellationToken cancellationToken)
         {
-            var orders = await _orderRepository.All(cancellationToken);
+            var orders = await _orderRepository.All();
 
             return orders.Select(o => new Order
             {

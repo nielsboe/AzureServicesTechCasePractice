@@ -1,3 +1,3 @@
 ﻿namespace Application.Products.Commands;
 
-public record DeleteProductCommand(int productId, CancellationToken cancellationToken);
+public record DeleteProductCommand(string productName, CancellationToken cancellationToken);

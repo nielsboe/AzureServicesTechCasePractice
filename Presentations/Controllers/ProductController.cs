@@ -6,21 +6,15 @@ namespace Presentation.Controllers;
 
 [Route("api/[controller]")]
 [ApiController]
-public class ProductController : Controller
+public class ProductController(IServiceBusSenderClient senderClient, IProductHandler productHandler, IGetAllProducts getAllProducts) : Controller
 {
-    private readonly IServiceBusSenderClient _senderClient;
-    private IProductHandler _productHandler;
+    IServiceBusSenderClient _senderClient = senderClient;
+    IGetAllProducts _getAllProducts = getAllProducts;
 
-    public ProductController(IServiceBusSenderClient senderClient, IProductHandler productHandler)
+    [HttpGet("GetAllProducts")]
+    public async Task<IActionResult> GetAllProducts(CancellationToken cancellationToken)
     {
-        _senderClient = senderClient;
-        _productHandler = productHandler;
-    }
-
-    [HttpGet("GetProducts")]
-    public async Task<IActionResult> GetProducts(CancellationToken cancellationToken)
-    {
-        return Ok(await _productHandler.GetAll(cancellationToken));
+        return Ok(await _getAllProducts.All());
     }
 
     [HttpPut("CreateProduct")]

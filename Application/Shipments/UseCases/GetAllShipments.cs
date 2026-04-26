@@ -14,13 +14,13 @@ namespace Application.Shipments.UseCases
 
         public async Task<ICollection<Shipment>> GetAllShipments(CancellationToken cancellationToken)
         {
-            var shipments = await _shipmentRepository.All(cancellationToken);
+            var shipments = await _shipmentRepository.All();
 
-            return shipments.Select(p => new Product
+            return shipments.Select(s => new Shipment
             {
-                Name = p.Name,
-                Description = p.Description,
-                Price = p.Price
+                Products = s.Products,
+                ShipmentAddress = s.ShipmentAddress,
+                ShipmentDate = s.ShipmentDate
             }).ToList();
         }
     }

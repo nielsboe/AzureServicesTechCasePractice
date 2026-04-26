@@ -32,6 +32,6 @@ public class ProductHandler(IProductRepository inventoryRepository) : IProductHa
 
     public async Task Delete(DeleteProductCommand deleteProductCommand)
     {
-        await _productRepository.Delete(deleteProductCommand.productId, deleteProductCommand.cancellationToken);
+        await _productRepository.Delete(deleteProductCommand.productName, deleteProductCommand.cancellationToken);
     }
 } 

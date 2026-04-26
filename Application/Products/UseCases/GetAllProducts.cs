@@ -12,7 +12,8 @@ internal class GetAllProducts
     {
         _productRepository = productRepository;
     }
-    public async Task<ICollection<Product>> GetAndMapAllProducts(CancellationToken cancellationToken)
+
+    public async Task<ICollection<Product>> GetAndMapAllProducts()
     {
         var products = await _productRepository.All();
 

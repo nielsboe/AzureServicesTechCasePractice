@@ -1,5 +1,6 @@
 using Application.Interfaces;
 using Domain;
+using Microsoft.EntityFrameworkCore;
 
 namespace Infrastructure.Databases.Repositories;
 
@@ -7,9 +8,9 @@ public class ShipmentRepository(DataContext context) : IShipmentRepository
 {
     private readonly DataContext _context = context;
 
-    public ICollection<Shipment> All()
+    public async Task<ICollection<Shipment>> All()
     {
-        return _context.Shipments.OrderBy(p => p.Id).ToList();
+        return await _context.Shipments.OrderBy(p => p.Id).ToListAsync();
     }
 
     public Shipment Get(int id)
