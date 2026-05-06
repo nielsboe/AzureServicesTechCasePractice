@@ -4,6 +4,7 @@ using Application.Products;
 using Application.Shipments;
 using Infrastructure.Databases;
 using Infrastructure.Servicebus;
+using Application.Shipments.Queries;
 
 namespace Presentation;
 
@@ -18,7 +19,7 @@ public static class IServiceCollectionExtensions
     public static void RegisterApplication(this IServiceCollection services)
     {
         services.AddScoped<IProductHandler, ProductHandler>();
-        services.AddScoped<IOrderHandler, OrderHandler>();
-        services.AddScoped<IShipmentHandler, ShipmentHandler >();
+        services.AddScoped<IShipmentHandler, ShipmentHandler>();
+        services.AddScoped<IGetAllShipments, GetAllShipments>();
     }
 }

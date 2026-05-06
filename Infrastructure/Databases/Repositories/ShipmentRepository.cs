@@ -13,9 +13,9 @@ public class ShipmentRepository(DataContext context) : IShipmentRepository
         return await _context.Shipments.OrderBy(p => p.Id).ToListAsync();
     }
 
-    public Shipment Get(int id)
+    public async Task<Shipment> Get(int id)
     {
-        return _context.Shipments.FirstOrDefault(p => p.Id == id) ?? throw new Exception("Shipment not found");
+        return await _context.Shipments.FirstOrDefaultAsync(p => p.Id == id) ?? throw new Exception("Shipment not found");
     }
 
     public async Task<int> Create(Shipment shipment, CancellationToken cancellationToken)
@@ -32,8 +32,9 @@ public class ShipmentRepository(DataContext context) : IShipmentRepository
          await _context.SaveChangesAsync(cancellationToken);
     }
 
-    public async Task Delete(Shipment shipment, CancellationToken cancellationToken)
+    public async Task Delete(int shipmentId, CancellationToken cancellationToken)
     {
+        var shipment = await _context.Shipments.FirstOrDefaultAsync(p => p.Id == shipmentId, cancellationToken) ?? throw new Exception("Shipment not found");
         _context.Shipments.Remove(shipment);
         await _context.SaveChangesAsync(cancellationToken);
     }

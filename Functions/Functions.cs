@@ -10,14 +10,25 @@ using Application.Interfaces;
 using Application.Products.Commands;
 using Application.Orders.Commands;
 using Application.Shipments.Commands;
+using Domain;
 
 namespace Workers;
 
-public class Functions(ILogger<Functions> logger, IProductHandler productHandler, IOrderHandler orderHandler, IShipmentHandler shipmentHandler)
+public class Functions(ILogger<Functions> logger, 
+    IProductHandler productHandler, 
+    CreateOrderHandler _createOrderHandler,
+    UpdateOrderHandler _updateOrderHandler,
+    DeleteOrderHandler _deleteOrderHandler, 
+    CreateProductHandler createProductHandler,
+    UpdateProductHandler updateProductHandler,
+    DeleteProductHandler deleteProductHandler,
+    CreateShipmentHandler createShipmentHandler,
+    UpdateShipmentHandler updateShipmentHandler,
+    DeleteShipmentHandler deleteShipmentHandler,
+    IShipmentHandler shipmentHandler)
 {
     private readonly ILogger<Functions> _logger = logger;
     private readonly IProductHandler _productHandler = productHandler;
-    private readonly IOrderHandler _orderHandler = orderHandler;
     private readonly IShipmentHandler _shipmentHandler = shipmentHandler;
 
     #region Products
@@ -99,7 +110,7 @@ public class Functions(ILogger<Functions> logger, IProductHandler productHandler
         // Deserialize the message body into an order DTO
         var orderDto = JsonSerializer.Deserialize<CreateOrderDto>(messageBody);
 
-        await _orderHandler.Create(new CreateOrderCommand(CreateOrderDto.Map(orderDto), cancellationToken));
+        await _createOrderHandler.Handle(new CreateOrderCommand(CreateOrderDto.Map(orderDto), cancellationToken));
 
         // Complete the message
         await messageActions.CompleteMessageAsync(message, cancellationToken);
@@ -119,7 +130,7 @@ public class Functions(ILogger<Functions> logger, IProductHandler productHandler
         // Deserialize the message body into an order DTO
         var orderDto = JsonSerializer.Deserialize<UpdateOrderDto>(messageBody);
 
-        await _orderHandler.Update(new UpdateOrderCommand(UpdateOrderDto.Map(orderDto), cancellationToken));
+        await _updateOrderHandler.Handle(new UpdateOrderCommand(UpdateOrderDto.Map(orderDto), cancellationToken));
 
         // Complete the message
         await messageActions.CompleteMessageAsync(message, cancellationToken);
@@ -139,7 +150,7 @@ public class Functions(ILogger<Functions> logger, IProductHandler productHandler
         // Deserialize the message body into a delete DTO
         var orderDto = JsonSerializer.Deserialize<DeleteOrderDto>(messageBody);
 
-        await _orderHandler.Delete(new DeleteOrderCommand(orderDto.CustomerName, cancellationToken));
+        await _deleteOrderHandler.Handle(new DeleteOrderCommand(orderDto.CustomerName, cancellationToken));
 
         // Complete the message
         await messageActions.CompleteMessageAsync(message, cancellationToken);

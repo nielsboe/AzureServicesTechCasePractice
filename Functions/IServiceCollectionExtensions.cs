@@ -1,5 +1,6 @@
 ﻿using Application.Interfaces;
 using Application.Orders;
+using Application.Orders.Commands;
 using Application.Products;
 using Application.Shipments;
 using Infrastructure.Servicebus;
@@ -18,7 +19,7 @@ public static class IServiceCollectionExtensions
     public static void RegisterApplication(this IServiceCollection services)
     {
         services.AddScoped<IProductHandler, ProductHandler>();
-        services.AddScoped<IOrderHandler, OrderHandler>();
+        services.AddScoped<ICommandHandler<CreateOrderCommand, int>, CreateOrderHandler>();
         services.AddScoped<IShipmentHandler, ShipmentHandler >();
     }
 }

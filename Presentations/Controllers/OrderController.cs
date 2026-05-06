@@ -1,21 +1,25 @@
-﻿using Application.Products;
-using Application.Interfaces;
+﻿using Application.Interfaces;
+using Application.Orders.Queries;
+using Application.Products;
+using Domain;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore.Internal;
 using Presentation.DTOs;
 
 namespace Presentation.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class OrderController(IServiceBusSenderClient senderClient, IGetAllOrders getAllOrders) : Controller
+    public class OrderController(IServiceBusSenderClient senderClient, 
+        IQueryHandler<GetAllOrdersQuery, ICollection<Order>> getAllOrders) : Controller
     {
         IServiceBusSenderClient _senderClient =  senderClient;
-        IGetAllOrders _getAllOrders = getAllOrders;
+        IQueryHandler<GetAllOrdersQuery, ICollection<Order>> _getAllOrders = getAllOrders;
 
         [HttpGet("GetAllOrders")]
-        public async Task<IActionResult> GetAllOrders()
+        public async Task<IActionResult> GetAllOrders(GetAllOrdersQuery query)
         {
-            return Ok(await _getAllOrders.All());
+            return Ok(await _getAllOrders.Handle(query));
         }
 
         [HttpPost("CreateOrder")]
