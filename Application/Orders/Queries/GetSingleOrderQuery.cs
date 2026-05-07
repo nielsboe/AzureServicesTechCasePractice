@@ -2,14 +2,14 @@
 using Domain;
 
 namespace Application.Orders.Queries;
-public record GetSingleOrderQuery(int orderId);
+public record GetSingleOrderQuery(int orderId, CancellationToken cancellationToken);
 
-public class GetSingleOrderHandler(IOrderRepository orderRepository) : IQueryHandler<GetSingleOrderQuery, Order>
+public class GetSingleOrderHandler(IRepository<Order> orderRepository) : IQueryHandler<GetSingleOrderQuery, Order>
 {
-    private readonly IOrderRepository _orderRepository = orderRepository;
+    private readonly IRepository<Order> _orderRepository = orderRepository;
 
     public Task<Order> Handle(GetSingleOrderQuery orderQuery)
     {
-        return _orderRepository.Get(orderQuery.orderId);
+        return _orderRepository.Get(orderQuery.orderId, orderQuery.cancellationToken);
     }
 }

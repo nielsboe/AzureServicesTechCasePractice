@@ -1,9 +1,12 @@
-﻿namespace Domain;
+﻿using Domain.Entity;
 
-public class Product
+namespace Domain;
+
+public class Product : IEntity
 {
-    public int ProductId { get; set; }
-    public string Name { get; set; }
-    public string Description { get; set; }
+    public int Id { get; set; }
+    public int InternalProductId { get; set; }
+    public required string Name { get; set; }
+    public string? Description { get; set; }
     public decimal Price { get; set; }
 }

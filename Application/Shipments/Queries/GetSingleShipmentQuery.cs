@@ -2,14 +2,14 @@
 using Domain;
 
 namespace Application.Shipments.Queries;
-public record GetSingleShipmentQuery(int shipmentId);
-public class GetSingleShipmentHandler(IShipmentRepository shipmentRepository) : IQueryHandler<GetSingleShipmentQuery, Shipment>
+public record GetSingleShipmentQuery(int shipmentId, CancellationToken cancellationToken);
+public class GetSingleShipmentHandler(IRepository<Shipment> shipmentRepository) : IQueryHandler<GetSingleShipmentQuery, Shipment>
 {
-    private readonly IShipmentRepository _shipmentRepository = shipmentRepository;
+    private readonly IRepository<Shipment> _shipmentRepository = shipmentRepository;
 
     public async Task<Shipment> Handle(GetSingleShipmentQuery query)
     {
-        var shipment = await _shipmentRepository.Get(query.shipmentId);
+        var shipment = await _shipmentRepository.Get(query.shipmentId, query.cancellationToken);
         return new Shipment()
         {
             Products = shipment.Products,

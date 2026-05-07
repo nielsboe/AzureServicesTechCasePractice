@@ -14,22 +14,18 @@ using Domain;
 
 namespace Workers;
 
-public class Functions(ILogger<Functions> logger, 
-    IProductHandler productHandler, 
-    CreateOrderHandler _createOrderHandler,
-    UpdateOrderHandler _updateOrderHandler,
-    DeleteOrderHandler _deleteOrderHandler, 
-    CreateProductHandler createProductHandler,
-    UpdateProductHandler updateProductHandler,
-    DeleteProductHandler deleteProductHandler,
-    CreateShipmentHandler createShipmentHandler,
-    UpdateShipmentHandler updateShipmentHandler,
-    DeleteShipmentHandler deleteShipmentHandler,
-    IShipmentHandler shipmentHandler)
+public class Functions(ILogger<Functions> logger,
+    ICommandHandler<CreateProductCommand, int> _createProductHandler,
+    ICommandHandler<UpdateProductCommand> _updateProductHandler,
+    ICommandHandler<DeleteProductCommand> _deleteProductHandler,
+    ICommandHandler<CreateOrderCommand, int> _createOrderHandler,
+    ICommandHandler<UpdateOrderCommand> _updateOrderHandler,
+    ICommandHandler<DeleteOrderCommand> _deleteOrderHandler, 
+    ICommandHandler<CreateShipmentCommand, int> _createShipmentHandler,
+    ICommandHandler<UpdateShipmentCommand> _updateShipmentHandler,
+    ICommandHandler<DeleteShipmentCommand> _deleteShipmentHandler)
 {
     private readonly ILogger<Functions> _logger = logger;
-    private readonly IProductHandler _productHandler = productHandler;
-    private readonly IShipmentHandler _shipmentHandler = shipmentHandler;
 
     #region Products
 
@@ -45,9 +41,9 @@ public class Functions(ILogger<Functions> logger,
         string messageBody = message.Body.ToString();
 
         // Deserialize the message body into a Product object
-        var productDto = JsonSerializer.Deserialize<CreateProductDto>(messageBody);
+        var productDto = JsonSerializer.Deserialize<CreateProductDto>(messageBody) ?? throw new Exception("Message body is empty");
 
-        await _productHandler.Create(new CreateProductCommand(CreateProductDto.Map(productDto), cancellationToken)); 
+        await _createProductHandler.Handle(new CreateProductCommand(CreateProductDto.Map(productDto), cancellationToken)); 
 
         // Complete the message
         await messageActions.CompleteMessageAsync(message, cancellationToken);
@@ -65,9 +61,9 @@ public class Functions(ILogger<Functions> logger,
         string messageBody = message.Body.ToString();
 
         // Deserialize the message body into a Product object
-        var productDto = JsonSerializer.Deserialize<UpdateProductDto>(messageBody);
+        var productDto = JsonSerializer.Deserialize<UpdateProductDto>(messageBody) ?? throw new Exception("Message body is empty");
 
-        await _productHandler.Update(new UpdateProductCommand(UpdateProductDto.Map(productDto), cancellationToken));
+        await _updateProductHandler.Handle(new UpdateProductCommand(UpdateProductDto.Map(productDto), cancellationToken));
 
         // Complete the message
         await messageActions.CompleteMessageAsync(message, cancellationToken);
@@ -85,9 +81,9 @@ public class Functions(ILogger<Functions> logger,
         string messageBody = message.Body.ToString();
 
         // Deserialize the message body into a Product object
-        var productDto = JsonSerializer.Deserialize<DeleteProductDto>(messageBody);
+        var productDto = JsonSerializer.Deserialize<DeleteProductDto>(messageBody) ?? throw new Exception("Message body is empty");
 
-        await _productHandler.Delete(new DeleteProductCommand(productDto.Name, cancellationToken));
+        await _deleteProductHandler.Handle(new DeleteProductCommand(DeleteProductDto.Map(productDto).InternalProductId, cancellationToken));
 
         // Complete the message
         await messageActions.CompleteMessageAsync(message, cancellationToken);
@@ -108,7 +104,7 @@ public class Functions(ILogger<Functions> logger,
         string messageBody = message.Body.ToString();
 
         // Deserialize the message body into an order DTO
-        var orderDto = JsonSerializer.Deserialize<CreateOrderDto>(messageBody);
+        var orderDto = JsonSerializer.Deserialize<CreateOrderDto>(messageBody) ?? throw new Exception("Message body is empty");
 
         await _createOrderHandler.Handle(new CreateOrderCommand(CreateOrderDto.Map(orderDto), cancellationToken));
 
@@ -128,7 +124,7 @@ public class Functions(ILogger<Functions> logger,
         string messageBody = message.Body.ToString();
 
         // Deserialize the message body into an order DTO
-        var orderDto = JsonSerializer.Deserialize<UpdateOrderDto>(messageBody);
+        var orderDto = JsonSerializer.Deserialize<UpdateOrderDto>(messageBody) ?? throw new Exception("Message body is empty");
 
         await _updateOrderHandler.Handle(new UpdateOrderCommand(UpdateOrderDto.Map(orderDto), cancellationToken));
 
@@ -148,9 +144,9 @@ public class Functions(ILogger<Functions> logger,
         string messageBody = message.Body.ToString();
 
         // Deserialize the message body into a delete DTO
-        var orderDto = JsonSerializer.Deserialize<DeleteOrderDto>(messageBody);
+        var orderDto = JsonSerializer.Deserialize<DeleteOrderDto>(messageBody) ?? throw new Exception("Message body is empty");
 
-        await _deleteOrderHandler.Handle(new DeleteOrderCommand(orderDto.CustomerName, cancellationToken));
+        await _deleteOrderHandler.Handle(new DeleteOrderCommand(DeleteOrderDto.Map(orderDto).InternalOrderId, cancellationToken));
 
         // Complete the message
         await messageActions.CompleteMessageAsync(message, cancellationToken);
@@ -168,9 +164,15 @@ public class Functions(ILogger<Functions> logger,
         ServiceBusMessageActions messageActions,
         CancellationToken cancellationToken)
     {
+        // Get the message body as a string
         string messageBody = message.Body.ToString();
-        var dto = JsonSerializer.Deserialize<CreateShipmentDto>(messageBody);
-        await _shipmentHandler.Create(new CreateShipmentCommand(CreateShipmentDto.Map(dto), cancellationToken));
+
+        // Deserialize the message body into a delete DTO
+        var dto = JsonSerializer.Deserialize<CreateShipmentDto>(messageBody) ?? throw new Exception("Message body is empty");
+
+        await _createShipmentHandler.Handle(new CreateShipmentCommand(CreateShipmentDto.Map(dto), cancellationToken));
+
+        // Complete the message
         await messageActions.CompleteMessageAsync(message, cancellationToken);
     }
 
@@ -182,9 +184,15 @@ public class Functions(ILogger<Functions> logger,
         ServiceBusMessageActions messageActions,
         CancellationToken cancellationToken)
     {
+        // Get the message body as a string
         string messageBody = message.Body.ToString();
-        var dto = JsonSerializer.Deserialize<UpdateShipmentDto>(messageBody);
-        await _shipmentHandler.Update(new UpdateShipmentCommand(UpdateShipmentDto.Map(dto), cancellationToken));
+
+        // Deserialize the message body into a delete DTO
+        var shipmentDto = JsonSerializer.Deserialize<UpdateShipmentDto>(messageBody) ?? throw new Exception("Message body is empty");
+
+        await _updateShipmentHandler.Handle(new UpdateShipmentCommand(UpdateShipmentDto.Map(shipmentDto), cancellationToken));
+
+        // Complete the message
         await messageActions.CompleteMessageAsync(message, cancellationToken);
     }
 
@@ -196,12 +204,17 @@ public class Functions(ILogger<Functions> logger,
         ServiceBusMessageActions messageActions,
         CancellationToken cancellationToken)
     {
+        // Get the message body as a string
         string messageBody = message.Body.ToString();
-        var dto = JsonSerializer.Deserialize<DeleteShipmentDto>(messageBody);
-        await _shipmentHandler.Delete(new DeleteShipmentCommand(dto.ShipmentId, cancellationToken));
+
+        // Deserialize the message body into a delete DTO
+        var shipmentDto = JsonSerializer.Deserialize<DeleteShipmentDto>(messageBody) ?? throw new Exception("Message body is empty");
+        
+        await _deleteShipmentHandler.Handle(new DeleteShipmentCommand(DeleteShipmentDto.Map(shipmentDto).InternalShipmentId, cancellationToken));
+
+        // Complete the message
         await messageActions.CompleteMessageAsync(message, cancellationToken);
     }
 
     #endregion
-
 }

@@ -1,4 +1,5 @@
 ﻿using Application.Interfaces;
+using Application.Shipments.Queries;
 using Microsoft.AspNetCore.Mvc;
 using Presentation.DTOs;
 
@@ -6,10 +7,11 @@ namespace Presentation.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class ShippingController(IServiceBusSenderClient senderClient, IGetAllShipments getAllShipments) : Controller
+    public class ShippingController(IServiceBusSenderClient senderClient, 
+        IQueryHandler<GetAllShipmentsQuery, IEnumerable<ShipmentDTO>> getAllShipmentsHandler) : Controller
     {
         IServiceBusSenderClient _senderClient = senderClient;
-        IGetAllShipments _getAllShipments = getAllShipments;
+        IQueryHandler<GetAllShipmentsQuery, IEnumerable<ShipmentDTO>> _getAllShipmentsHandler = getAllShipmentsHandler;
 
         [HttpGet("GetShipment")]
         public async Task<IActionResult> GetSingleShipment(ShipmentDTO shipmentDTO)
@@ -19,9 +21,9 @@ namespace Presentation.Controllers
         }
 
         [HttpGet("GetAllhipments")]
-        public async Task<IActionResult> GetAllShipments()
+        public async Task<IActionResult> GetAllShipments(GetAllShipmentsQuery query)
         {
-            return Ok(_getAllShipments.All());
+            return Ok(await _getAllShipmentsHandler.Handle(query));
         }
 
         [HttpPost("CreateShipment")]

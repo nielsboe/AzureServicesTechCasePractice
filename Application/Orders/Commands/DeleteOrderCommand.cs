@@ -1,15 +1,16 @@
 using Application.Interfaces;
+using Domain;
 
 namespace Application.Orders.Commands;
 
-public record DeleteOrderCommand(string customerName, CancellationToken cancellationToken);
+public record DeleteOrderCommand(int internalOrderId, CancellationToken cancellationToken);
 
-public class DeleteOrderHandler(IOrderRepository orderRepository) : ICommandHandler<DeleteOrderCommand>
+public class DeleteOrderHandler(IRepository<Order> orderRepository) : ICommandHandler<DeleteOrderCommand>
 {
-    private readonly IOrderRepository _orderRepository = orderRepository;
+    private readonly IRepository<Order> _orderRepository = orderRepository;
 
     public async Task Handle(DeleteOrderCommand command)
     {
-        await _orderRepository.Delete(command.customerName, command.cancellationToken);
+        await _orderRepository.Delete(command.internalOrderId, command.cancellationToken);
     }
 }

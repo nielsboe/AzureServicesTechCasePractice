@@ -4,9 +4,9 @@ using Domain;
 namespace Application.Products.Commands;
 
 public record CreateProductCommand(Product product, CancellationToken cancellationToken);
-public class CreateProductHandler(IProductRepository productRepository) : ICommandHandler<CreateProductCommand, int>
+public class CreateProductHandler(IRepository<Product> productRepository) : ICommandHandler<CreateProductCommand, int>
 {
-    private readonly IProductRepository _productRepository = productRepository;
+    private readonly IRepository<Product> _productRepository = productRepository;
 
     public async Task<int> Handle(CreateProductCommand command)
     {
@@ -18,6 +18,6 @@ public class CreateProductHandler(IProductRepository productRepository) : IComma
 
         await _productRepository.Create(command.product, command.cancellationToken);
 
-        return command.product.ProductId;
+        return command.product.InternalProductId;
     }
 }

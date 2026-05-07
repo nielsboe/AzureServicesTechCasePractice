@@ -1,15 +1,16 @@
 ﻿using Application.Interfaces;
+using Domain;
 
 namespace Application.Products.Commands;
 
-public record DeleteProductCommand(string productName, CancellationToken cancellationToken);
+public record DeleteProductCommand(int internalProductId, CancellationToken cancellationToken);
 
-public class DeleteProductHandler(IProductRepository productRepository) : ICommandHandler<DeleteProductCommand>
+public class DeleteProductHandler(IRepository<Product> productRepository) : ICommandHandler<DeleteProductCommand>
 {
-    private readonly IProductRepository _productRepository = productRepository;
+    private readonly IRepository<Product> _productRepository = productRepository;
 
     public async Task Handle(DeleteProductCommand command)
     {
-        await _productRepository.Delete(command.productName, command.cancellationToken);
+        await _productRepository.Delete(command.internalProductId, command.cancellationToken);
     }
 }

@@ -4,9 +4,9 @@ using Domain;
 namespace Application.Shipments.Commands;
 
 public record CreateShipmentCommand(Shipment shipment, CancellationToken cancellationToken);
-public class CreateShipmentHandler(IShipmentRepository shipmentRepository) : ICommandHandler<CreateShipmentCommand, int>
+public class CreateShipmentHandler(IRepository<Shipment> shipmentRepository) : ICommandHandler<CreateShipmentCommand, int>
 {
-    private readonly IShipmentRepository _shipmentRepository = shipmentRepository;
+    private readonly IRepository<Shipment> _shipmentRepository = shipmentRepository;
 
     public async Task<int> Handle(CreateShipmentCommand command)
     {
@@ -17,6 +17,6 @@ public class CreateShipmentHandler(IShipmentRepository shipmentRepository) : ICo
 
         await _shipmentRepository.Create(command.shipment, command.cancellationToken);
 
-        return command.shipment.ShipmentId;
+        return command.shipment.InternalShipmentId;
     }
 }

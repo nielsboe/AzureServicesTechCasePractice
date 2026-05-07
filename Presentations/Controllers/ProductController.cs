@@ -1,4 +1,5 @@
 ﻿using Application.Interfaces;
+using Application.Products.Queries;
 using Microsoft.AspNetCore.Mvc;
 using Presentation.DTOs;
 
@@ -6,15 +7,15 @@ namespace Presentation.Controllers;
 
 [Route("api/[controller]")]
 [ApiController]
-public class ProductController(IServiceBusSenderClient senderClient, IProductHandler productHandler, IGetAllProducts getAllProducts) : Controller
+public class ProductController(IServiceBusSenderClient senderClient, IQueryHandler<GetAllProductsQuery, IEnumerable<ProductDTO>> getAllProductsHandler) : Controller
 {
     IServiceBusSenderClient _senderClient = senderClient;
-    IGetAllProducts _getAllProducts = getAllProducts;
+    IQueryHandler<GetAllProductsQuery, IEnumerable<ProductDTO>> _getAllProductsHandler = getAllProductsHandler;
 
     [HttpGet("GetAllProducts")]
     public async Task<IActionResult> GetAllProducts(CancellationToken cancellationToken)
     {
-        return Ok(await _getAllProducts.All());
+        return Ok(await _getAllProductsHandler.Handle(new GetAllProductsQuery(cancellationToken)));
     }
 
     [HttpPut("CreateProduct")]

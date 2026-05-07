@@ -5,9 +5,9 @@ using Domain;
 namespace Application.Shipments.Commands;
 
 public record UpdateShipmentCommand(Shipment shipment, CancellationToken cancellationToken);
-public class UpdateShipmentHandler(IShipmentRepository shipmentRepository) : ICommandHandler<UpdateShipmentCommand>
+public class UpdateShipmentHandler(IRepository<Shipment> shipmentRepository) : ICommandHandler<UpdateShipmentCommand>
 {
-    private readonly IShipmentRepository _shipmentRepository = shipmentRepository;
+    private readonly IRepository<Shipment> _shipmentRepository = shipmentRepository;
 
     public async Task Handle(UpdateShipmentCommand command)
     {

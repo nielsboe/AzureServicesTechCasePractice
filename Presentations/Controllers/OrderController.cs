@@ -1,9 +1,7 @@
 ﻿using Application.Interfaces;
 using Application.Orders.Queries;
-using Application.Products;
 using Domain;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore.Internal;
 using Presentation.DTOs;
 
 namespace Presentation.Controllers
@@ -11,15 +9,15 @@ namespace Presentation.Controllers
     [Route("api/[controller]")]
     [ApiController]
     public class OrderController(IServiceBusSenderClient senderClient, 
-        IQueryHandler<GetAllOrdersQuery, ICollection<Order>> getAllOrders) : Controller
+        IQueryHandler<GetAllOrdersQuery, ICollection<Order>> getAllOrdersHandler) : Controller
     {
         IServiceBusSenderClient _senderClient =  senderClient;
-        IQueryHandler<GetAllOrdersQuery, ICollection<Order>> _getAllOrders = getAllOrders;
+        IQueryHandler<GetAllOrdersQuery, ICollection<Order>> _getAllOrdersHandler = getAllOrdersHandler;
 
         [HttpGet("GetAllOrders")]
         public async Task<IActionResult> GetAllOrders(GetAllOrdersQuery query)
         {
-            return Ok(await _getAllOrders.Handle(query));
+            return Ok(await _getAllOrdersHandler.Handle(query));
         }
 
         [HttpPost("CreateOrder")]

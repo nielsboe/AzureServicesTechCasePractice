@@ -1,4 +1,5 @@
 ﻿using Application.Interfaces;
+using Domain;
 using Infrastructure.Databases.Repositories;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -25,9 +26,7 @@ public static class IServiceCollectionExtensions
             });
         }
         );
-        services.AddScoped<IOrderRepository, OrderRepository>();
-        services.AddScoped<IProductRepository, ProductRepository>();
-        services.AddScoped<IShipmentRepository, ShipmentRepository>();
+        services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
         return services;
     }
 }

@@ -5,9 +5,9 @@ namespace Application.Products.Commands;
 
 public record UpdateProductCommand(Product product, CancellationToken cancellationToken);
 
-public class UpdateProductHandler(IProductRepository productRepository) : ICommandHandler<UpdateProductCommand>
+public class UpdateProductHandler(IRepository<Product> productRepository) : ICommandHandler<UpdateProductCommand>
 {
-    private readonly IProductRepository _productRepository = productRepository;
+    private readonly IRepository<Product> _productRepository = productRepository;
 
     public async Task Handle(UpdateProductCommand command)
     {

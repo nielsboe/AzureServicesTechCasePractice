@@ -78,22 +78,22 @@ public static class IServiceScopeExtensions
             {
                 new Shipment
                 {
-                    OrderId = orders[0].OrderId,
-                    Products = orders[0].Products,
+                    OrderId = orders[0].InternalOrderId,
+                    Products = orders[0].Products ?? new List<Product>(),
                     ShipmentAddress = "Stationsstraat 1, Amsterdam",
                     ShipmentDate = DateTime.Now
                 },
                 new Shipment
                 {
-                    OrderId = orders[1].OrderId,
-                    Products = orders[1].Products,
+                    OrderId = orders[1].InternalOrderId,
+                    Products = orders[1].Products ?? new List<Product>(),
                     ShipmentAddress = "Stationsstraat 2, Amsterdam",
                     ShipmentDate = DateTime.Now
                 },
                 new Shipment
                 {
-                    OrderId = orders[2].OrderId,
-                    Products = orders[2].Products,
+                    OrderId = orders[2].InternalOrderId,
+                    Products = orders[2].Products ?? new List<Product>(),
                     ShipmentAddress = "Stationsstraat 3, Amsterdam",
                     ShipmentDate = DateTime.Now
                 }
@@ -105,5 +105,4 @@ public static class IServiceScopeExtensions
 
         return scope;
     }
-
 }

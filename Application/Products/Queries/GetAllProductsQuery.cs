@@ -2,14 +2,14 @@
 using Domain;
 
 namespace Application.Products.Queries;
-public record GetAllProductsQuery;
-public class GetAllProductsHandler(IProductRepository productRepository) : IQueryHandler<GetAllProductsQuery, ICollection<Product>>
+public record GetAllProductsQuery(CancellationToken cancellationToken);
+public class GetAllProductsHandler(IRepository<Product> productRepository) : IQueryHandler<GetAllProductsQuery, ICollection<Product>>
 {
-    private readonly IProductRepository _productRepository = productRepository;
+    private readonly IRepository<Product> _productRepository = productRepository;
 
     public async Task<ICollection<Product>> Handle(GetAllProductsQuery query)
     {
-        var products = await _productRepository.All();
+        var products = await _productRepository.All(query.cancellationToken);
 
         return products.Select(p => new Product
         {
