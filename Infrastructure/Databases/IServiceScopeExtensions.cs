@@ -15,11 +15,11 @@ public static class IServiceScopeExtensions
         {
             var products = new List<Product>
             {
-                new Product { Name = "McLaren", Description = "Een snelle auto", Price = 100000 },
-                new Product { Name = "Apache", Description = "Een helicopter", Price = 500000 },
-                new Product { Name = "Jacht", Description = "Een boot", Price = 5000000 },
-                new Product { Name = "Gazelle", Description = "Een fiets", Price = 500 },
-                new Product { Name = "Step", Description = "Een step", Price = 20 }
+                new Product { InternalProductId = 1, Name = "McLaren", Description = "Een snelle auto", Price = 100000 },
+                new Product { InternalProductId = 2, Name = "Apache", Description = "Een helicopter", Price = 500000 },
+                new Product { InternalProductId = 3, Name = "Jacht", Description = "Een boot", Price = 5000000 },
+                new Product { InternalProductId = 4, Name = "Gazelle", Description = "Een fiets", Price = 500 },
+                new Product { InternalProductId = 5, Name = "Step", Description = "Een step", Price = 20 }
             };
 
             dbContext.Products.AddRange(products);
