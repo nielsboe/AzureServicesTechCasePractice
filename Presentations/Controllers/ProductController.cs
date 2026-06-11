@@ -13,9 +13,9 @@ public class ProductController(IServiceBusSenderClient senderClient, IQueryHandl
     IQueryHandler<GetAllProductsQuery, IEnumerable<ProductDTO>> _getAllProductsHandler = getAllProductsHandler;
 
     [HttpGet("GetAllProducts")]
-    public async Task<IActionResult> GetAllProducts(CancellationToken cancellationToken)
+    public async Task<IActionResult> GetAllProducts(GetAllProductsQuery query)
     {
-        return Ok(await _getAllProductsHandler.Handle(new GetAllProductsQuery(cancellationToken)));
+        return Ok(await _getAllProductsHandler.Handle(query));
     }
 
     [HttpPut("CreateProduct")]
