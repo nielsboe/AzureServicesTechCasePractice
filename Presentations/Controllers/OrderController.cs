@@ -11,11 +11,17 @@ namespace Presentation.Controllers
     public class OrderController(IServiceBusSenderClient senderClient, 
         IQueryHandler<GetAllOrdersQuery, ICollection<Order>> getAllOrdersHandler) : Controller
     {
+        [HttpGet("GetOrder")]
+        public async Task<IActionResult> GetSingleOrder(OrderDTO orderDTO)
+        {
+            await senderClient.Send(orderDTO, "get-order");
+            return Ok();
+        }
 
         [HttpGet("GetAllOrders")]
-        public async Task<IActionResult> GetAllOrders()
+        public async Task<IActionResult> GetAllOrders(CancellationToken cancellationToken)
         {
-            return Ok(await getAllOrdersHandler.Handle(new GetAllOrdersQuery()));
+            return Ok(await getAllOrdersHandler.Handle(new GetAllOrdersQuery(), cancellationToken));
         }
 
         [HttpPost("CreateOrder")]
