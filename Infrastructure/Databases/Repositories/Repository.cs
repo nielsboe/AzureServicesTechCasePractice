@@ -8,7 +8,7 @@ public class Repository<T>(DataContext context) : IRepository<T> where T: class,
 {
     private readonly DataContext _context = context;
 
-    public async Task<ICollection<T>> All()
+    public async Task<ICollection<T>> All(CancellationToken cancellationToken)
     {
         return await _context.Set<T>().OrderBy(i => i.Id)
             .AsNoTracking()
