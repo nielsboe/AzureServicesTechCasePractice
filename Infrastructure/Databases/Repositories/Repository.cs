@@ -8,11 +8,11 @@ public class Repository<T>(DataContext context) : IRepository<T> where T: class,
 {
     private readonly DataContext _context = context;
 
-    public async Task<ICollection<T>> All(CancellationToken cancellationToken)
+    public async Task<ICollection<T>> All()
     {
         return await _context.Set<T>().OrderBy(i => i.Id)
             .AsNoTracking()
-            .ToListAsync(cancellationToken);
+            .ToListAsync();
     }
 
     public async Task<T> Get(int id, CancellationToken cancellationToken)

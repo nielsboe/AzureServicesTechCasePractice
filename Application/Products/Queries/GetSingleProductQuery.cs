@@ -2,14 +2,13 @@
 using Domain;
 
 namespace Application.Products.Queries;
-public record GetSingleProductQuery(int productId, CancellationToken cancellationToken);
+public record GetSingleProductQuery(int productId);
 public class GetSingleProductHandler(IRepository<Product> productRepository) : IQueryHandler<GetSingleProductQuery, Product>
 {
-    private readonly IRepository<Product> _productRepository = productRepository;
 
-    public async Task<Product> Handle(GetSingleProductQuery query)
+    public async Task<Product> Handle(GetSingleProductQuery query, CancellationToken cancellationToken)
     {
-        var product = await _productRepository.Get(query.productId, query.cancellationToken);
+        var product = await productRepository.Get(query.productId, cancellationToken);
         return new Product
         {
             Name = product.Name,

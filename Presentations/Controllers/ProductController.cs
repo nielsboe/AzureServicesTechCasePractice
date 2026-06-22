@@ -10,12 +10,11 @@ namespace Presentation.Controllers;
 public class ProductController(IServiceBusSenderClient senderClient, IQueryHandler<GetAllProductsQuery, IEnumerable<ProductDTO>> getAllProductsHandler) : Controller
 {
     IServiceBusSenderClient _senderClient = senderClient;
-    IQueryHandler<GetAllProductsQuery, IEnumerable<ProductDTO>> _getAllProductsHandler = getAllProductsHandler;
 
     [HttpGet("GetAllProducts")]
-    public async Task<IActionResult> GetAllProducts(GetAllProductsQuery query)
+    public async Task<IActionResult> GetAllProducts()
     {
-        return Ok(await _getAllProductsHandler.Handle(query));
+        return Ok(await getAllProductsHandler.Handle(new GetAllProductsQuery()));
     }
 
     [HttpPut("CreateProduct")]

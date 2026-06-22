@@ -1,15 +1,14 @@
 ﻿using Application.Interfaces;
+using Application.Orders.Queries;
 using Domain;
 
 namespace Application.Shipments.Queries;
-public record GetAllShipmentsQuery(CancellationToken cancellationToken);
+public record GetAllShipmentsQuery;
 public class GetAllShipmentsHandler(IRepository<Shipment> shipmentRepository) : IQueryHandler<GetAllShipmentsQuery, ICollection<Shipment>>
 {
-    private readonly IRepository<Shipment> _shipmentRepository = shipmentRepository;
-
-    public async Task<ICollection<Shipment>> Handle(GetAllShipmentsQuery query)
+    public async Task<ICollection<Shipment>> Handle(GetAllShipmentsQuery query, CancellationToken cancellationToken)
     {
-        var shipments = await _shipmentRepository.All(query.cancellationToken);
+        var shipments = await shipmentRepository.All(cancellationToken);
         return shipments.Select(s => new Shipment
         {
             Products = s.Products,

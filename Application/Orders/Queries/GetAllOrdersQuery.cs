@@ -3,13 +3,12 @@ using Domain;
 
 namespace Application.Orders.Queries;
 
-public record GetAllOrdersQuery(CancellationToken cancellationToken);
+public record GetAllOrdersQuery;
 public class GetAllOrdersHandler(IRepository<Order> orderRepository) : IQueryHandler<GetAllOrdersQuery, ICollection<Order>>
 {
-    private readonly IRepository<Order> _orderRepository = orderRepository;
-    public async Task<ICollection<Order>> Handle(GetAllOrdersQuery query)
+    public async Task<ICollection<Order>> Handle(GetAllOrdersQuery query, CancellationToken cancellationToken)
     {
-        var orders = await _orderRepository.All(query.cancellationToken);
+        var orders = await orderRepository.All(cancellationToken);
 
         return orders.Select(o => new Order
         {

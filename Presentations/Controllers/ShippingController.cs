@@ -11,7 +11,6 @@ namespace Presentation.Controllers
         IQueryHandler<GetAllShipmentsQuery, IEnumerable<ShipmentDTO>> getAllShipmentsHandler) : Controller
     {
         IServiceBusSenderClient _senderClient = senderClient;
-        IQueryHandler<GetAllShipmentsQuery, IEnumerable<ShipmentDTO>> _getAllShipmentsHandler = getAllShipmentsHandler;
 
         [HttpGet("GetShipment")]
         public async Task<IActionResult> GetSingleShipment(ShipmentDTO shipmentDTO)
@@ -21,9 +20,9 @@ namespace Presentation.Controllers
         }
 
         [HttpGet("GetAllhipments")]
-        public async Task<IActionResult> GetAllShipments(GetAllShipmentsQuery query)
+        public async Task<IActionResult> GetAllShipments()
         {
-            return Ok(await _getAllShipmentsHandler.Handle(query));
+            return Ok(await getAllShipmentsHandler.Handle(new GetAllShipmentsQuery()));
         }
 
         [HttpPost("CreateShipment")]

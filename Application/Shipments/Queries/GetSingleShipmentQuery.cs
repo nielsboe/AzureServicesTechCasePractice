@@ -5,11 +5,9 @@ namespace Application.Shipments.Queries;
 public record GetSingleShipmentQuery(int shipmentId, CancellationToken cancellationToken);
 public class GetSingleShipmentHandler(IRepository<Shipment> shipmentRepository) : IQueryHandler<GetSingleShipmentQuery, Shipment>
 {
-    private readonly IRepository<Shipment> _shipmentRepository = shipmentRepository;
-
-    public async Task<Shipment> Handle(GetSingleShipmentQuery query)
+    public async Task<Shipment> Handle(GetSingleShipmentQuery query, CancellationToken cancellationToken)
     {
-        var shipment = await _shipmentRepository.Get(query.shipmentId, query.cancellationToken);
+        var shipment = await shipmentRepository.Get(query.shipmentId, cancellationToken);
         return new Shipment()
         {
             Products = shipment.Products,
