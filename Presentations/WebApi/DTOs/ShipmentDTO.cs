@@ -1,4 +1,4 @@
-﻿namespace Presentation.DTOs;
+﻿namespace WebApi.DTOs;
 
 public class ShipmentDTO
 {

@@ -2,9 +2,9 @@
 using Application.Orders.Queries;
 using Domain;
 using Microsoft.AspNetCore.Mvc;
-using Presentation.DTOs;
+using WebApi.DTOs;
 
-namespace Presentation.Controllers
+namespace WebApi.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]

@@ -1,6 +1,6 @@
 ﻿using Infrastructure.Databases;
 
-namespace Presentation;
+namespace WebApi;
 
 public static class WebApplicationExtensions
 {

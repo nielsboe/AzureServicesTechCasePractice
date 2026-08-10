@@ -12,7 +12,7 @@ using Domain;
 using Infrastructure.Databases;
 using Infrastructure.Servicebus;
 
-namespace Presentation;
+namespace WebApi;
 
 public static class IServiceCollectionExtensions
 {
