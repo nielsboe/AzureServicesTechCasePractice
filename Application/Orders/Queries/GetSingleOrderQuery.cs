@@ -6,10 +6,9 @@ public record GetSingleOrderQuery(int orderId, CancellationToken cancellationTok
 
 public class GetSingleOrderHandler(IRepository<Order> orderRepository) : IQueryHandler<GetSingleOrderQuery, Order>
 {
-    private readonly IRepository<Order> _orderRepository = orderRepository;
 
-    public Task<Order> Handle(GetSingleOrderQuery orderQuery)
+    public Task<Order> Handle(GetSingleOrderQuery orderQuery, CancellationToken cancellationToken)
     {
-        return _orderRepository.Get(orderQuery.orderId, orderQuery.cancellationToken);
+        return orderRepository.Get(orderQuery.orderId, cancellationToken);
     }
 }

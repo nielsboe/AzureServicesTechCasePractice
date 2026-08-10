@@ -9,33 +9,37 @@ namespace WebApi.Controllers;
 [ApiController]
 public class ProductController(IServiceBusSenderClient senderClient, IQueryHandler<GetAllProductsQuery, IEnumerable<ProductDTO>> getAllProductsHandler) : Controller
 {
-    IServiceBusSenderClient _senderClient = senderClient;
-    IQueryHandler<GetAllProductsQuery, IEnumerable<ProductDTO>> _getAllProductsHandler = getAllProductsHandler;
+    [HttpGet("GetProduct")]
+    public async Task<IActionResult> GetSingleProduct(ProductDTO productDTO)
+    {
+        await senderClient.Send(productDTO, "get-product");
+        return Ok();
+    }
 
     [HttpGet("GetAllProducts")]
-    public async Task<IActionResult> GetAllProducts(GetAllProductsQuery query)
+    public async Task<IActionResult> GetAllProducts(CancellationToken cancellationToken)
     {
-        return Ok(await _getAllProductsHandler.Handle(query));
+        return Ok(await getAllProductsHandler.Handle(new GetAllProductsQuery(), cancellationToken));
     }
 
     [HttpPut("CreateProduct")]
     public async Task<IActionResult> CreateProduct(ProductDTO productDTO)
     {
-        await _senderClient.Send(productDTO, "create-product");
+        await senderClient.Send(productDTO, "create-product");
         return Ok();
     }
 
     [HttpPost("UpdateProduct")]
     public async Task<IActionResult> UpdateProduct(ProductDTO productDTO)
     {
-        await _senderClient.Send(productDTO, "update-product");
+        await senderClient.Send(productDTO, "update-product");
         return Ok();
     }
 
     [HttpDelete("DeleteProduct")]
     public async Task<IActionResult> DeleteProduct(ProductDTO productDTO)
     {
-        await _senderClient.Send(productDTO, "delete-product");
+        await senderClient.Send(productDTO, "delete-product");
         return Ok();
     }
 }

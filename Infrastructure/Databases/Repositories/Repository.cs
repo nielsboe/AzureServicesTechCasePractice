@@ -12,7 +12,7 @@ public class Repository<T>(DataContext context) : IRepository<T> where T: class,
     {
         return await _context.Set<T>().OrderBy(i => i.Id)
             .AsNoTracking()
-            .ToListAsync(cancellationToken);
+            .ToListAsync();
     }
 
     public async Task<T> Get(int id, CancellationToken cancellationToken)
