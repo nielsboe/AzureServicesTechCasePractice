@@ -15,11 +15,47 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Presentations", "Presentati
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Workers", "Functions\Workers.csproj", "{ABA28EBF-CA29-44B6-98B6-631DF7A12197}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebApi", "Presentations\WebApi.csproj", "{8B168EA1-6AFB-BAB9-A6F5-5DCEB40FC482}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Application", "Application\Application.csproj", "{F80C4E72-27A0-12B5-0634-DD5C11CFB0C1}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Domain", "Domain\Domain.csproj", "{E528BBC3-1C26-8C35-F682-23718816ADCD}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebApi", "Presentations\WebApi\WebApi.csproj", "{D8EA68B2-1159-0B37-6740-D090277F4216}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Web", "Web", "{02EA681E-C7D8-13C7-8484-4AC65E1B71E8}"
+	ProjectSection(SolutionItems) = preProject
+		Presentations\Web\.editorconfig = Presentations\Web\.editorconfig
+		Presentations\Web\.gitignore = Presentations\Web\.gitignore
+		Presentations\Web\.prettierrc = Presentations\Web\.prettierrc
+		Presentations\Web\angular.json = Presentations\Web\angular.json
+		Presentations\Web\package-lock.json = Presentations\Web\package-lock.json
+		Presentations\Web\Web\package.json = Presentations\Web\Web\package.json
+		Presentations\Web\README.md = Presentations\Web\README.md
+		Presentations\Web\tsconfig.app.json = Presentations\Web\tsconfig.app.json
+		Presentations\Web\tsconfig.json = Presentations\Web\tsconfig.json
+		Presentations\Web\tsconfig.spec.json = Presentations\Web\tsconfig.spec.json
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{2479323A-1746-4CAB-9693-6F3691B0DD51}"
+	ProjectSection(SolutionItems) = preProject
+		Presentations\Web\src\index.html = Presentations\Web\src\index.html
+		Presentations\Web\src\main.ts = Presentations\Web\src\main.ts
+		Presentations\Web\src\styles.css = Presentations\Web\src\styles.css
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "public", "public", "{4A40CA95-E8BD-482F-BCEB-42EA371A1C09}"
+	ProjectSection(SolutionItems) = preProject
+		Presentations\Web\public\favicon.ico = Presentations\Web\public\favicon.ico
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "app", "app", "{81065481-35EE-4C65-8DA0-1DB9D9561B4D}"
+	ProjectSection(SolutionItems) = preProject
+		Presentations\Web\src\app\app.config.ts = Presentations\Web\src\app\app.config.ts
+		Presentations\Web\src\app\app.css = Presentations\Web\src\app\app.css
+		Presentations\Web\src\app\app.html = Presentations\Web\src\app\app.html
+		Presentations\Web\src\app\app.routes.ts = Presentations\Web\src\app\app.routes.ts
+		Presentations\Web\src\app\app.spec.ts = Presentations\Web\src\app\app.spec.ts
+		Presentations\Web\src\app\app.ts = Presentations\Web\src\app\app.ts
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -35,10 +71,6 @@ Global
 		{ABA28EBF-CA29-44B6-98B6-631DF7A12197}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{ABA28EBF-CA29-44B6-98B6-631DF7A12197}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{ABA28EBF-CA29-44B6-98B6-631DF7A12197}.Release|Any CPU.Build.0 = Release|Any CPU
-		{8B168EA1-6AFB-BAB9-A6F5-5DCEB40FC482}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{8B168EA1-6AFB-BAB9-A6F5-5DCEB40FC482}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{8B168EA1-6AFB-BAB9-A6F5-5DCEB40FC482}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{8B168EA1-6AFB-BAB9-A6F5-5DCEB40FC482}.Release|Any CPU.Build.0 = Release|Any CPU
 		{F80C4E72-27A0-12B5-0634-DD5C11CFB0C1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{F80C4E72-27A0-12B5-0634-DD5C11CFB0C1}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F80C4E72-27A0-12B5-0634-DD5C11CFB0C1}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -47,6 +79,10 @@ Global
 		{E528BBC3-1C26-8C35-F682-23718816ADCD}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E528BBC3-1C26-8C35-F682-23718816ADCD}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E528BBC3-1C26-8C35-F682-23718816ADCD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D8EA68B2-1159-0B37-6740-D090277F4216}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D8EA68B2-1159-0B37-6740-D090277F4216}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D8EA68B2-1159-0B37-6740-D090277F4216}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D8EA68B2-1159-0B37-6740-D090277F4216}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -54,9 +90,13 @@ Global
 	GlobalSection(NestedProjects) = preSolution
 		{5872AEB3-BAA3-FE31-B0EB-0FB6DBEDCF83} = {9AC5BD65-B5AD-46A4-B1F9-81923CB22052}
 		{ABA28EBF-CA29-44B6-98B6-631DF7A12197} = {D21CB1CA-EBEF-44C2-9088-46DB8D483BA5}
-		{8B168EA1-6AFB-BAB9-A6F5-5DCEB40FC482} = {D21CB1CA-EBEF-44C2-9088-46DB8D483BA5}
 		{F80C4E72-27A0-12B5-0634-DD5C11CFB0C1} = {FC455B3D-F3C2-42DD-8110-6DEF5BEC0A71}
 		{E528BBC3-1C26-8C35-F682-23718816ADCD} = {5F36F04C-FD82-445D-A65E-20DA5172825A}
+		{D8EA68B2-1159-0B37-6740-D090277F4216} = {D21CB1CA-EBEF-44C2-9088-46DB8D483BA5}
+		{02EA681E-C7D8-13C7-8484-4AC65E1B71E8} = {D21CB1CA-EBEF-44C2-9088-46DB8D483BA5}
+		{2479323A-1746-4CAB-9693-6F3691B0DD51} = {02EA681E-C7D8-13C7-8484-4AC65E1B71E8}
+		{4A40CA95-E8BD-482F-BCEB-42EA371A1C09} = {02EA681E-C7D8-13C7-8484-4AC65E1B71E8}
+		{81065481-35EE-4C65-8DA0-1DB9D9561B4D} = {2479323A-1746-4CAB-9693-6F3691B0DD51}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {1E187C21-AFE5-4A0C-B201-D99CAC033780}

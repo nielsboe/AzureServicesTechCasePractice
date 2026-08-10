@@ -1,9 +1,9 @@
 ﻿using Application.Interfaces;
 using Application.Products.Queries;
 using Microsoft.AspNetCore.Mvc;
-using Presentation.DTOs;
+using WebApi.DTOs;
 
-namespace Presentation.Controllers;
+namespace WebApi.Controllers;
 
 [Route("api/[controller]")]
 [ApiController]
