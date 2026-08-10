@@ -6,6 +6,8 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddOpenApi();
+builder.Services.AddAuthentication();
+builder.Services.AddAuthorization();
 builder.Services.RegisterApplication();
 builder.Services.RegisterInfrastructure(builder.Configuration);
 
