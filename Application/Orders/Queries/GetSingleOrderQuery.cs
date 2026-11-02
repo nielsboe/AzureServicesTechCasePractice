@@ -2,7 +2,7 @@
 using Domain;
 
 namespace Application.Orders.Queries;
-public record GetSingleOrderQuery(int orderId, CancellationToken cancellationToken);
+public record GetSingleOrderQuery(int orderId);
 
 public class GetSingleOrderHandler(IRepository<Order> orderRepository) : IQueryHandler<GetSingleOrderQuery, Order>
 {

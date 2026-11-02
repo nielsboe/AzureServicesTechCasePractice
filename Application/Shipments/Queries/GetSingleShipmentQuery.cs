@@ -2,7 +2,7 @@
 using Domain;
 
 namespace Application.Shipments.Queries;
-public record GetSingleShipmentQuery(int shipmentId, CancellationToken cancellationToken);
+public record GetSingleShipmentQuery(int shipmentId);
 public class GetSingleShipmentHandler(IRepository<Shipment> shipmentRepository) : IQueryHandler<GetSingleShipmentQuery, Shipment>
 {
     public async Task<Shipment> Handle(GetSingleShipmentQuery query, CancellationToken cancellationToken)

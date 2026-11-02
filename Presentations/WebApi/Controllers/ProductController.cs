@@ -7,13 +7,14 @@ namespace WebApi.Controllers;
 
 [Route("api/[controller]")]
 [ApiController]
-public class ProductController(IServiceBusSenderClient senderClient, IQueryHandler<GetAllProductsQuery, IEnumerable<ProductDTO>> getAllProductsHandler) : Controller
+public class ProductController(IServiceBusSenderClient senderClient, 
+    IQueryHandler<GetAllProductsQuery, IEnumerable<ProductDTO>> getAllProductsHandler,
+    IQueryHandler<GetSingleProductQuery, ProductDTO> getSingleProductHandler) : Controller
 {
-    [HttpGet("GetProduct")]
-    public async Task<IActionResult> GetSingleProduct(ProductDTO productDTO)
+    [HttpGet("GetSingleProduct")]
+    public async Task<IActionResult> GetSingleProduct(int productId)
     {
-        await senderClient.Send(productDTO, "get-product");
-        return Ok();
+        return Ok(await getSingleProductHandler.Handle(new GetSingleProductQuery(productId), CancellationToken.None));
     }
 
     [HttpGet("GetAllProducts")]

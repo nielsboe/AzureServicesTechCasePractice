@@ -8,13 +8,13 @@ namespace WebApi.Controllers
     [Route("api/[controller]")]
     [ApiController]
     public class ShippingController(IServiceBusSenderClient senderClient, 
-        IQueryHandler<GetAllShipmentsQuery, IEnumerable<ShipmentDTO>> getAllShipmentsHandler) : Controller
+        IQueryHandler<GetAllShipmentsQuery, IEnumerable<ShipmentDTO>> getAllShipmentsHandler,
+        IQueryHandler<GetSingleShipmentQuery, ShipmentDTO> getSingleShipmentHandler) : Controller
     {
         [HttpGet("GetShipment")]
-        public async Task<IActionResult> GetSingleShipment(ShipmentDTO shipmentDTO)
+        public async Task<IActionResult> GetSingleShipment(int shipmentId)
         {
-            await senderClient.Send(shipmentDTO, "get-shipment");
-            return Ok();
+            return Ok(await getSingleShipmentHandler.Handle(new GetSingleShipmentQuery(shipmentId), CancellationToken.None));
         }
 
         [HttpGet("GetAllhipments")]

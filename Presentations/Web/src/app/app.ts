@@ -1,26 +1,48 @@
-import { CommonModule } from '@angular/common';
+import { CurrencyPipe } from '@angular/common';
 import { Component, signal } from '@angular/core';
-import { RouterOutlet } from '@angular/router';
+import { Order } from '../shared/models/order';
+import { Product } from '../shared/models/product';
+import { Shipment } from '../shared/models/shipment';
+import { Products } from './products/products';
 
 @Component({
   standalone: true,
   selector: 'app-root',
-  imports: [CommonModule, RouterOutlet],
+  imports: [CurrencyPipe, Products],
   templateUrl: './app.html',
   styleUrl: './app.css'
 })
-export class App {
-  protected readonly title = signal('Web');
-  protected readonly status = signal('Ready');
-  protected readonly lastResult = signal('');
 
+export class App {
+  public readonly title = signal('Homes');
+  public readonly status = signal('Ready');
+  public readonly lastResult = signal('');
+
+  products = [
+    new Product(1, 101, 'Product A', 'Description A', 10.99),
+    new Product(2, 102, 'Product B', 'Description B', 19.99),
+    new Product(3, 103, 'Product C', 'Description C', 5.49)
+  ]
+
+  orders = [
+    new Order(1, 101, 'Customer A', new Date(), false, [], 0.0),
+    new Order(2, 102, 'Customer B', new Date(), false, [], 0.0),
+    new Order(3, 103, 'Customer C', new Date(), false, [], 0.0)
+  ]
+
+  shipments = [
+    new Shipment(1, 101, 10920261, 'Description A', this.products, new Date()),
+    new Shipment(2, 102, 10920262, 'Description B', this.products, new Date()),
+    new Shipment(3, 103, 10920263, 'Description C', this.products, new Date())
+  ]
+  
   private readonly apiBase = '';
 
-  protected async getOrders() {
+  public async getOrders() {
     await this.callApi('/api/Order/GetAllOrders');
   }
 
-  protected async createOrder() {
+  public async createOrder() {
     await this.callApi('/api/Order/CreateOrder', {
       method: 'POST',
       body: JSON.stringify({
@@ -35,7 +57,7 @@ export class App {
     });
   }
 
-  protected async updateOrder() {
+  public async updateOrder() {
     await this.callApi('/api/Order/UpdateOrder', {
       method: 'POST',
       body: JSON.stringify({
@@ -50,7 +72,7 @@ export class App {
     });
   }
 
-  protected async deleteOrder() {
+  public async deleteOrder() {
     await this.callApi('/api/Order/DeleteOrder', {
       method: 'POST',
       body: JSON.stringify({
@@ -65,11 +87,11 @@ export class App {
     });
   }
 
-  protected async getProducts() {
+  public async getProducts() {
     await this.callApi('/api/Product/GetAllProducts');
   }
 
-  protected async createProduct() {
+  public async createProduct() {
     await this.callApi('/api/Product/CreateProduct', {
       method: 'PUT',
       body: JSON.stringify({
@@ -82,7 +104,7 @@ export class App {
     });
   }
 
-  protected async updateProduct() {
+  public async updateProduct() {
     await this.callApi('/api/Product/UpdateProduct', {
       method: 'POST',
       body: JSON.stringify({
@@ -95,7 +117,7 @@ export class App {
     });
   }
 
-  protected async deleteProduct() {
+  public async deleteProduct() {
     await this.callApi('/api/Product/DeleteProduct', {
       method: 'DELETE',
       body: JSON.stringify({
@@ -108,11 +130,11 @@ export class App {
     });
   }
 
-  protected async getShipments() {
+  public async getShipments() {
     await this.callApi('/api/Shipping/GetAllhipments');
   }
 
-  protected async createShipment() {
+  public async createShipment() {
     await this.callApi('/api/Shipping/CreateShipment', {
       method: 'POST',
       body: JSON.stringify({
@@ -126,7 +148,7 @@ export class App {
     });
   }
 
-  protected async updateShipment() {
+  public async updateShipment() {
     await this.callApi('/api/Shipping/UpdateShipment', {
       method: 'POST',
       body: JSON.stringify({
@@ -140,7 +162,7 @@ export class App {
     });
   }
 
-  protected async deleteShipment() {
+  public async deleteShipment() {
     await this.callApi('/api/Shipping/DeleteShipment', {
       method: 'POST',
       body: JSON.stringify({

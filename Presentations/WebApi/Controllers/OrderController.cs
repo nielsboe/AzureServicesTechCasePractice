@@ -9,13 +9,13 @@ namespace WebApi.Controllers
     [Route("api/[controller]")]
     [ApiController]
     public class OrderController(IServiceBusSenderClient senderClient, 
-        IQueryHandler<GetAllOrdersQuery, ICollection<Order>> getAllOrdersHandler) : Controller
+        IQueryHandler<GetAllOrdersQuery, ICollection<Order>> getAllOrdersHandler,
+        IQueryHandler<GetSingleOrderQuery, Order> getSingleOrderHandler) : Controller
     {
         [HttpGet("GetOrder")]
-        public async Task<IActionResult> GetSingleOrder(OrderDTO orderDTO)
+        public async Task<IActionResult> GetSingleOrder(int orderId, CancellationToken cancellationToken)
         {
-            await senderClient.Send(orderDTO, "get-order");
-            return Ok();
+            return Ok(await getSingleOrderHandler.Handle(new GetSingleOrderQuery(orderId), cancellationToken));
         }
 
         [HttpGet("GetAllOrders")]
