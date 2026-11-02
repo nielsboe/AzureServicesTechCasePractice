@@ -1,11 +1,8 @@
 ﻿using Application.Interfaces;
-using Application.Orders;
 using Application.Orders.Commands;
 using Application.Orders.Queries;
-using Application.Products;
 using Application.Products.Commands;
 using Application.Products.Queries;
-using Application.Shipments;
 using Application.Shipments.Commands;
 using Application.Shipments.Queries;
 using Domain;

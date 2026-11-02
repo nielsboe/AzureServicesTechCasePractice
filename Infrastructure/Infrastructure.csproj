@@ -21,5 +21,12 @@
     <ProjectReference Include="..\Domain\Domain.csproj" />
     <ProjectReference Include="..\Application\Application.csproj" />
   </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Authentication\CurrentUserService\" />
+    <Folder Include="Authentication\AuthenticationExtensions\" />
+    <Folder Include="Authentication\PasswordHasher\" />
+    <Folder Include="Authentication\JwtTokenGenerator\" />
+  </ItemGroup>
   
 </Project>
